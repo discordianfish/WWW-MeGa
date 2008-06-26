@@ -1,0 +1,17 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+		<a href="?path=<TMPL_VAR NAME=PARENT>">back to <TMPL_VAR NAME=PARENT></a><br />
+		<div class="items">
+		<TMPL_LOOP NAME="ITEMS">
+			<div class="item">
+				<a rel="lightbox[foobar]" title="&lt;a href=&quot;?path=<TMPL_VAR NAME=PATH_REL>&amp;size=<TMPL_VAR NAME=SIZE_IN>&quot;&gt;View Original Photo Page&lt;/a&gt;" href="?rm=sized;path=<TMPL_VAR NAME=PATH_REL>;size=<TMPL_VAR NAME=SIZE_IN>">
+				<img src="?rm=sized;path=<TMPL_VAR NAME=PATH_REL>" />
+				</a>
+
+				<a href="?path=<TMPL_VAR NAME=PATH_REL>;size=<TMPL_VAR NAME=SIZE_IN>">
+					<p class="name"><TMPL_VAR NAME=NAME></a>
+				</a>
+				</ul>
+			</div>
+		</TMPL_LOOP>
+		</div>
+<TMPL_INCLUDE NAME="footer.tmpl">

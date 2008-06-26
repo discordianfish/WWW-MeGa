@@ -1,0 +1,16 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+		<a href="?path=<TMPL_VAR NAME=PARENT>">back to <TMPL_VAR NAME=PARENT></a><br />
+		<div class="items">
+		<TMPL_LOOP NAME="ITEMS">
+			<div class="item">
+				<a href="?path=<TMPL_VAR NAME=PATH_REL>;size=1">
+				<img src="?rm=image;path=<TMPL_VAR NAME=PATH_REL>" /></a>
+				<%unless EXIF.Title%><p class="name"><TMPL_VAR NAME=NAME><p><%/unless%>
+				<p class="exif-tiny"><TMPL_INCLUDE NAME="exif/tiny.tmpl"></p>
+				<%switch TYPE %>
+					<%case Audio,Video,Image%><a href="?rm=original;path=<TMPL_VAR NAME=PATH_REL>">Download</a>
+				<%/switch%>
+			</div>
+		</TMPL_LOOP>
+		</div>
+<TMPL_INCLUDE NAME="footer.tmpl">
