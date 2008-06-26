@@ -12,10 +12,10 @@ while (my $q = new CGI::Fast)
 		QUERY => $q,
 		PARAMS =>
 		{
-			config => '/data/Code/projects/CGI::Application::Phosy/trunk/examples/gallery.conf',
+			config => '/data/Code/projects/CGI-Application-Phosy/trunk/examples/gallery.conf',
 			cache => \%cache,
 		},
-		TMPL_PATH => '/data/Code/projects/CGI::Application::Phosy/trunk/share/templates/default'
+		TMPL_PATH => '/data/Code/projects/CGI-Application-Phosy/trunk/share/templates/default'
 	);
 	$app->run();
 };
