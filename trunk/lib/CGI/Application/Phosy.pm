@@ -64,7 +64,7 @@ use CGI::Application::Phosy::Item;
 use strict;
 use warnings;
 
-our $VERSION = '0.00';
+our $VERSION = '0.01';
 sub setup
 {
 	my $self = shift;
