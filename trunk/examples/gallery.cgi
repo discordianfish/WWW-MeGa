@@ -1,17 +1,14 @@
 #!/usr/bin/perl -w
 use strict;
 
-use lib '../lib/';
 use CGI::Application::Phosy;
+use File::ShareDir;
 
-#our @ISA = qw(CGI::Application);
+my $share = File::ShareDir::module_dir('CGI::Application::Phosy');
 
 my $webapp = CGI::Application::Phosy->new
 (
-	PARAMS =>
-	{
-		config => '/data/Code/projects/CGI-Application-Phosy/trunk/examples/gallery.conf'
-	},
-	TMPL_PATH => '/data/Code/projects/CGI-Application-Phosy/trunk/share/templates/default'
+	PARAMS => { config => '/var/www/phosy.conf' },
+	TMPL_PATH => "$share/templates/default"
 );
 $webapp->run();

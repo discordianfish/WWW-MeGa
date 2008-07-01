@@ -11,6 +11,7 @@ requires	'File::Path' => 0;
 requires	'MIME::Types' => 0;
 requires	'Image::ExifTool' => 0;
 requires	'Image::Magick' => 0;
+requires	'File::ShareDir' => 0;
 
 install_share;
 

@@ -54,6 +54,7 @@ Johannes 'fish' Ziemke <fish-code@freigeist.org>
 use CGI::Application;
 use File::Spec;
 use Scalar::Util;
+use File::ShareDir;
 
 use base ("CGI::Application::Plugin::HTCompiled", "CGI::Application");
 
@@ -69,13 +70,26 @@ sub setup
 {
 	my $self = shift;
 	$self->{PathPattern} = "[^-,()'.\/ _0-9A-Za-z\x80-\xff\[\]]";
-	$self->config_file($self->param('config')) or die "no config set. use i.e. PARAMS => { config => '/path/to/config.conf' }";
+	my $config = $self->config_file($self->param('config') || 'gallery.conf');
+
+	unless ( -e $config )
+	{
+		warn "config '$config' not found, consider setting a writable config: PARAMS { config => /path/to/config }";
+		my $cfg = new Config::Simple(syntax=>'simple');
+		$cfg->param('cache', '/tmp/phosy');
+		$cfg->write($config) or die "could not create config '$config': $!";
+		warn "saved $config";
+	}
+
+	$self->config_file($config) or die "could not load config '$config': $!";
 
 	$self->{sizes} = $self->config_param('sizes') || [ 120, 600, 800 ];
 	$self->config_param('cache', '/tmp/phosy') unless $self->config_param('cache');
 	$self->config_param('album_thumb', 'THUMBNAIL') unless $self->config_param('album_thumb');
-	$self->config_param('icons', 'icons/') unless $self->config_param('icons');
-
+	$self->config_param('thumb-type', 'png') unless $self->config_param('thumb-type');
+	$self->config_param('root', '/usr/share/pixmaps') unless $self->config_param('root');
+	#TODO: eventuell nicht als feste dep sondern ShareDir nur benutzen wenn installiert
+	$self->config_param('icons', File::ShareDir::module_dir('CGI::Application::Phosy') . '/icons/') unless $self->config_param('icons');
 
 	$self->{cache} = $self->param('cache');
 
