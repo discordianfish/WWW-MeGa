@@ -1,0 +1,7 @@
+\.svn
+\.swp
+doc\/
+share\/templates\/lightbox
+Makefile$
+Makefile-MakeMaker.PL
+MANIFEST\.
