@@ -1,6 +1,6 @@
-package CGI::Application::Phosy::Item::Text;
-use CGI::Application::Phosy::Item;
-our @ISA = qw(CGI::Application::Phosy::Item);
+package WWW::MeGa::Item::Text;
+use WWW::MeGa::Item;
+our @ISA = qw(WWW::MeGa::Item);
 
 sub data
 {

@@ -1,3 +1,3 @@
-package CGI::Application::Phosy::Item::Audio;
-use CGI::Application::Phosy::Item;
-our @ISA = qw(CGI::Application::Phosy::Item);
+package WWW::MeGa::Item::Audio;
+use WWW::MeGa::Item;
+our @ISA = qw(WWW::MeGa::Item);

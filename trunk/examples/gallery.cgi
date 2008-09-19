@@ -1,12 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
 
-use CGI::Application::Phosy;
+use WWW::MeGa;
 use File::ShareDir;
 
-my $share = File::ShareDir::module_dir('CGI::Application::Phosy');
+my $share = File::ShareDir::module_dir('WWW::MeGa');
 
-my $webapp = CGI::Application::Phosy->new
+my $webapp = WWW::MeGa->new
 (
 	PARAMS => { config => '/var/www/phosy.conf' },
 	TMPL_PATH => "$share/templates/default"

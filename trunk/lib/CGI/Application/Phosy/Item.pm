@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 use File::Basename;
-package CGI::Application::Phosy::Item;
+package WWW::MeGa::Item;
 
 sub new
 {
@@ -34,10 +34,10 @@ sub new
                 }
 
         }
-        my $class = 'CGI::Application::Phosy::Item::' . ucfirst $type;
+        my $class = 'WWW::MeGa::Item::' . ucfirst $type;
         unless (eval "require $class")
         {
-                $class = 'CGI::Application::Phosy::Item::Other';
+                $class = 'WWW::MeGa::Item::Other';
                 eval "require $class" or die $!;
         }
 

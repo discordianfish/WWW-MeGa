@@ -1,12 +1,12 @@
-package CGI::Application::Phosy;
+package WWW::MeGa;
 
 =head1 NAME
-CGI::Application::Phosy - A media gallery
+WWW::MeGa - A media gallery
 
 =head1 SYNOPSIS
 =begin perl
 
-my $webapp = CGI::Application::Phosy->new
+my $webapp = WWW::MeGa->new
 (
 	PARAMS => { config => /path/to/your/config }
 );
@@ -23,7 +23,7 @@ root /path/to/your/pictures
 
 
 =head1 DESCRIPTION
-CGI::Application::Phosy is a web based media browser. It should
+WWW::MeGa is a web based media browser. It should
 be run from mod_perl or FastCGI (see examples/gallery.fcgi) because
 it uses some runtime caching.
 
@@ -60,7 +60,7 @@ use base ("CGI::Application::Plugin::HTCompiled", "CGI::Application");
 
 use CGI::Application::Plugin::Config::Simple;
 
-use CGI::Application::Phosy::Item;
+use WWW::MeGa::Item;
 
 use strict;
 use warnings;
@@ -89,7 +89,7 @@ sub setup
 	$self->config_param('thumb-type', 'png') unless $self->config_param('thumb-type');
 	$self->config_param('root', '/usr/share/pixmaps') unless $self->config_param('root');
 	#TODO: eventuell nicht als feste dep sondern ShareDir nur benutzen wenn installiert
-	$self->config_param('icons', File::ShareDir::module_dir('CGI::Application::Phosy') . '/icons/') unless $self->config_param('icons');
+	$self->config_param('icons', File::ShareDir::module_dir('WWW::MeGa') . '/icons/') unless $self->config_param('icons');
 
 	$self->{cache} = $self->param('cache');
 
@@ -185,7 +185,7 @@ sub view_image
 
 	my $size = $self->{sizes}->[$self->sizeReq];
 
-	my $item = CGI::Application::Phosy::Item->new($path,$self->config(),$self->{cache});
+	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
 	return $self->binary( $item->thumbnail($size) );
 }
 
@@ -197,7 +197,7 @@ sub view_original
 	my $self = shift;
 	my $path = $self->fileReq;
 
-	my $item = CGI::Application::Phosy::Item->new($path,$self->config(),$self->{cache});
+	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
 	return $self->binary($item->{path}, $item->original);
 }
 
@@ -214,17 +214,17 @@ sub view_path
 		SIZE_OUT => $size_idx-1
 	);
 
-	my $item = CGI::Application::Phosy::Item->new($path,$self->config(),$self->{cache});
+	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
 
 	my @path_e = File::Spec->splitdir($path);
 	my $parent = File::Spec->catdir(@path_e[0 .. @path_e-2]); # bei file: album des files, bei folder: enthaltener folder
 
 
 	my $t;
-	if (Scalar::Util::blessed($item) eq 'CGI::Application::Phosy::Item::Folder')
+	if (Scalar::Util::blessed($item) eq 'WWW::MeGa::Item::Folder')
 	{
 		$t = $self->load_tmpl('album.tmpl', die_on_bad_params=>0, global_vars=>1);
-		my @items = map { (CGI::Application::Phosy::Item->new($_,$self->config(),$self->{cache}))->data } $item->list;
+		my @items = map { (WWW::MeGa::Item->new($_,$self->config(),$self->{cache}))->data } $item->list;
 		$t->param(PARENT => $parent, %sizes, ITEMS => \@items, CONFIG => $self->config->vars);
 
 	} else

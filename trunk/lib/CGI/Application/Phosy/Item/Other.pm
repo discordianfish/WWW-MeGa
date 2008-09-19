@@ -1,3 +1,3 @@
-package CGI::Application::Phosy::Item::Other;
-use CGI::Application::Phosy::Item;
-our @ISA = qw(CGI::Application::Phosy::Item);
+package WWW::MeGa::Item::Other;
+use WWW::MeGa::Item;
+our @ISA = qw(WWW::MeGa::Item);

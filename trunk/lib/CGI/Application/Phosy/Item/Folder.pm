@@ -1,6 +1,6 @@
-package CGI::Application::Phosy::Item::Folder;
-use CGI::Application::Phosy::Item;
-our @ISA = qw(CGI::Application::Phosy::Item);
+package WWW::MeGa::Item::Folder;
+use WWW::MeGa::Item;
+our @ISA = qw(WWW::MeGa::Item);
 use strict;
 
 sub thumbnail_source
@@ -11,7 +11,7 @@ sub thumbnail_source
 	return $thumb if -e $thumb;
 	warn "$thumb not found, autoselecting";
 	my $first = $self->first or return undef;
-	my $item = CGI::Application::Phosy::Item->new($first,$self->{config},$self->{cache});
+	my $item = WWW::MeGa::Item->new($first,$self->{config},$self->{cache});
 	return $item->thumbnail_source;
 }
 

@@ -1,4 +1,4 @@
-# This Makefile is for the CGI::Application::Phosy extension to perl.
+# This Makefile is for the WWW::MeGa extension to perl.
 #
 # It was generated automatically by MakeMaker version
 # 6.30 (Revision: Revision: 4535 ) from the contents of
@@ -14,7 +14,7 @@
 #     AUTHOR => q[Johannes 'fish' Ziemke <fish-code@freigeist.org>]
 #     DIR => []
 #     DISTNAME => q[CGI-Application-Phosy]
-#     NAME => q[CGI::Application::Phosy]
+#     NAME => q[WWW::MeGa]
 #     NO_META => q[1]
 #     PL_FILES => {  }
 #     PREREQ_PM => { CGI::Application::Plugin::Config::Simple=>q[0], File::Spec=>q[0], ExtUtils::MakeMaker=>q[6.11], Image::Magick=>q[0], MIME::Types=>q[0], CGI::Application::Plugin::HTCompiled=>q[0], CGI::Application=>q[0], File::ShareDir=>q[0], Image::ExifTool=>q[0], File::Path=>q[0], File::Basename=>q[0] }
@@ -57,7 +57,7 @@ VENDORLIBEXP = /usr/lib64/perl5/vendor_perl/5.8.8
 AR_STATIC_ARGS = cr
 DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
-NAME = CGI::Application::Phosy
+NAME = WWW::MeGa
 NAME_SYM = CGI_Application_Phosy
 VERSION = 0.01
 VERSION_MACRO = VERSION
@@ -426,7 +426,7 @@ manifypods : pure_all  \
 	lib/CGI/Application/Phosy.pm \
 	lib/CGI/Application/Phosy.pm
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
-	  lib/CGI/Application/Phosy.pm $(INST_MAN3DIR)/CGI::Application::Phosy.$(MAN3EXT) 
+	  lib/CGI/Application/Phosy.pm $(INST_MAN3DIR)/WWW::MeGa.$(MAN3EXT) 
 
 
 

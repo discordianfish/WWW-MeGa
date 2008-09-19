@@ -1,7 +1,7 @@
-package CGI::Application::Phosy::Item::Image;
-use CGI::Application::Phosy::Item;
+package WWW::MeGa::Item::Image;
+use WWW::MeGa::Item;
 
-our @ISA = qw(CGI::Application::Phosy::Item);
+our @ISA = qw(WWW::MeGa::Item);
 
 # the image representation of a image is a image ;)
 
