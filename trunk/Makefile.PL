@@ -1,7 +1,7 @@
 use inc::Module::Install;
 
-name		'CGI-Application-Phosy';
-all_from	'lib/CGI/Application/Phosy.pm';
+name		'WWW-MeGa';
+all_from	'lib/WWW/MeGa.pm';
 requires	'CGI::Application' => 0;
 requires	'CGI::Application::Plugin::HTCompiled' => 0;
 requires	'CGI::Application::Plugin::Config::Simple' => 0;
