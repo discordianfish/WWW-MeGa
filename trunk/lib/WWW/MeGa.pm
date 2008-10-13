@@ -59,11 +59,13 @@ use File::ShareDir;
 use base ("CGI::Application::Plugin::HTCompiled", "CGI::Application");
 
 use CGI::Application::Plugin::Config::Simple;
+use CGI::Application::Plugin::Stream (qw/stream_file/);
 
 use WWW::MeGa::Item;
 
 use strict;
 use warnings;
+use Carp qw(confess); local $SIG{__WARN__} = \&confess;
 
 our $VERSION = '0.01';
 sub setup
@@ -186,7 +188,8 @@ sub view_image
 	my $size = $self->{sizes}->[$self->sizeReq];
 
 	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
-	return $self->binary( $item->thumbnail($size) );
+	
+	return $self->binary($item, $size);
 }
 
 =head3 view_original
@@ -198,7 +201,7 @@ sub view_original
 	my $path = $self->fileReq;
 
 	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
-	return $self->binary($item->{path}, $item->original);
+	return $self->binary($item);
 }
 
 sub view_path
@@ -242,26 +245,34 @@ sub view_path
 sub binary
 {
 	my $self = shift;
-	my $path = shift or die "no key found"; # key for cache
-	my $data = shift or die "no data found";
-	my $file = File::Basename::basename $path;
-	my $mime = $self->{cache}->{mime}->{$path} if $path;
+	my $item = shift;
+	my $size = shift;
 
-	unless ($mime)
+	
+	if ($size)
 	{
-		#use File::MMagic;
-		#my $mm = File::MMagic->new($self->config_param('mime-magic'));
-		#$mime = $mm->checktype_contents($data);
-		use MIME::Types;
-		my $mt = MIME::Types->new();
-		warn "trying to guess mime type for $path";
-		$mime = $mt->mimeTypeOf($path) or die "$!";
+		$self->header_add( -'Content-disposition' => 'inline' );
+		return $self->stream_file($item->thumbnail($size)) ? undef : $self->error_mode;
+	} else
+	{
+		$self->header_add( -attachment => "hugo-$item->{file}" );
+		return $self->stream_file($item->original) ? undef : $self->error_mode;
+	}
 
-		$self->{cache}->{mime}->{$path} = $mime if $path;
-	} 
-	warn "mime type for $path: $mime";
-	$self->header_props ({-type => $mime, -Content_length => -s $path });
-	return $data;
+#	my $mime = $self->{cache}->{mime}->{$path} if $path;
+#
+#	unless ($mime)
+#	{
+#		use MIME::Types;
+#		my $mt = MIME::Types->new();
+#		warn "trying to guess mime type for $path";
+#		$mime = $mt->mimeTypeOf($path) or die "$!";
+#
+#		$self->{cache}->{mime}->{$path} = $mime if $path;
+#	} 
+#	warn "mime type for $path: $mime";
+#	$self->header_props ({-type => $mime, -Content_length => -s $path });
+#	return $data;
 }
 
 1

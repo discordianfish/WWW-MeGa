@@ -82,7 +82,7 @@ sub exif
 }
 
 =head2 thumbnail_sized
-returns a (binary) thumbnail of the object in requested size
+makes sure that a thumbnail exists in requested size and returns a path to it
 should not be called directly but through the caching methode
 =cut
 sub thumbnail_sized
@@ -138,19 +138,12 @@ sub thumbnail
 	#my $sized = $self->thumbnail_path($size,$cache) or return undef;
 	my $sized = File::Spec->catdir($cache, $self->{path} . '_' . $size . '.' . $type);
 	warn "sized: $sized";
-	my $data;
 
-	if ( -e $sized)
-	{
-		open FILE, '<' . $sized;
-		my @f = <FILE>;
-		$data = join '', @f;
-		close FILE;
-	} else 
+	unless ( -e $sized)
 	{
 		$self->prepare_dir($sized) or warn "could not create dir for $sized";
 
-		$data = $self->thumbnail_sized($size,$type);
+		my $data = $self->thumbnail_sized($size,$type);
 		return undef unless $data;
 
 		open FILE, '>' . $sized or warn "could not write thumbnail to $sized";
@@ -158,7 +151,7 @@ sub thumbnail
 		close FILE;
 	}
 		
-	return ($sized, $data);
+	return $sized;
 }
 
 =head2 original
@@ -168,12 +161,7 @@ sub original
 {
 	my $self = shift;
 	die "file '$self->{path}' does not exist" unless -f $self->{path};
-	open FILE, '<' . $self->{path};
-	binmode FILE;
-	my @f = <FILE>;
-	my $data = join '', @f;
-	close FILE;
-	return $data;
+	return $self->{path};
 }
 
 sub prepare_dir
