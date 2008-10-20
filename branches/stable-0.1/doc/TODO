@@ -1,0 +1,8 @@
+=Milestone 0.1=
+* Durcharbeiten von
+** http://theoryx5.uwinnipeg.ca/CPAN/perl/pod/perlbot.html
+** perldoc ExtUtils::MakeMaker.pm 
+** http://www.cpan.org/modules/00modlist.long.html
+==Obey "guidelines_for_module_creation"==
+* Let the objects look after themselves! Generally, avoid hard-wired class names as far as possible.
+
