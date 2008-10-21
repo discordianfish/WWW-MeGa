@@ -2,15 +2,16 @@ package WWW::MeGa::Item::Video;
 use WWW::MeGa::Item;
 our @ISA = qw(WWW::MeGa::Item);
 
+our $VERSION = '0.09_1';
+
 sub thumbnail_source
 {
 	my $self = shift;
-	warn "??";
 	if ($self->{config}->param('video-thumbs'))
 	{
 		my $type = $self->{config}->param('thumb-type');
 		my $frame = File::Spec->catdir($self->{config}->param('cache'), $self->{path} .'.'. $type);
-		warn "trying access $frame";
+		warn "trying access $frame" if $self->{config}->param('debug');
 
 		unless (-e $frame)
 		{

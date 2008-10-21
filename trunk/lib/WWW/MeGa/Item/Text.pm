@@ -2,6 +2,8 @@ package WWW::MeGa::Item::Text;
 use WWW::MeGa::Item;
 our @ISA = qw(WWW::MeGa::Item);
 
+our $VERSION = '0.09_1';
+
 sub data
 {
 	my ($self, @args) = @_;

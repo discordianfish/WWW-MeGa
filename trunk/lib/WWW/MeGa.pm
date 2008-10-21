@@ -1,56 +1,54 @@
 package WWW::MeGa;
 
 =head1 NAME
-WWW::MeGa - A media gallery
+
+WWW::MeGa - A MediaGallery
+
 
 =head1 SYNOPSIS
-=begin perl
 
-my $webapp = WWW::MeGa->new
-(
+ my $webapp = WWW::MeGa->new
+ (
 	PARAMS => { config => /path/to/your/config }
-);
-$webapp->run;
-
-=end
+ );
+ $webapp->run;
 
 Minimal config:
-=begin text
 
-root /path/to/your/pictures
-
-=end
+	root /path/to/your/pictures
 
 
 =head1 DESCRIPTION
+
 WWW::MeGa is a web based media browser. It should
 be run from mod_perl or FastCGI (see examples/gallery.fcgi) because
 it uses some runtime caching.
 
-Atm every file will be delievered by the CGI itself. So you don't need
+Every file will be delievered by the CGI itself. So you don't have
 to care about setting up picture/thumb dirs.
 
-=head2 FEATURES=
-==over
-=item *
-on-the-fly image resizing (and orientation tag based autorotating)
-=item *
-video thumbnails
-=item *
-displays text files
-=item *
-reads exif tag
-=item *
-templating with <HTML::Template::Compiled>
+
+=head1 FEATURES
+
+=over
+
+=item * on-the-fly image resizing (and orientation tag based autorotating)
+
+=item * video thumbnails
+
+=item * displays text files
+
+=item * reads exif tag
+
+=item * templating with L<HTML::Template::Compiled>
+
 =back
 
-=head1 AUTHOR
-Johannes 'fish' Ziemke <fish-code@freigeist.org>
 
-=head1 SEE ALSO
-<CGI::Application>
+=head1 METHODES
 
 =cut
+
 use CGI::Application;
 use File::Spec;
 use Scalar::Util;
@@ -67,7 +65,7 @@ use strict;
 use warnings;
 use Carp qw(confess); local $SIG{__WARN__} = \&confess;
 
-our $VERSION = '0.01';
+our $VERSION = '0.09_1';
 sub setup
 {
 	my $self = shift;
@@ -90,6 +88,7 @@ sub setup
 	$self->config_param('album_thumb', 'THUMBNAIL') unless $self->config_param('album_thumb');
 	$self->config_param('thumb-type', 'png') unless $self->config_param('thumb-type');
 	$self->config_param('root', '/usr/share/pixmaps') unless $self->config_param('root');
+	$self->config_param('debug',0) unless $self->config_param('debug');
 	#TODO: eventuell nicht als feste dep sondern ShareDir nur benutzen wenn installiert
 	$self->config_param('icons', File::ShareDir::module_dir('WWW::MeGa') . '/icons/') unless $self->config_param('icons');
 
@@ -118,17 +117,6 @@ sub view_error
 	return $t->output;
 }
 
-=head2 parameter parsing functions
-
-Caution: these functions parse the user input
-
-=cut
-
-
-
-=head3 saneReq
-returns a sanitized var
-=cut
 sub saneReq
 {
 	my $self = shift;
@@ -139,9 +127,6 @@ sub saneReq
 	return $req;
 }
 
-=head3
-returns the given path, dies if no path specified
-=cut
 sub fileReq($)
 {
 	my $self = shift;
@@ -149,9 +134,6 @@ sub fileReq($)
 	return $path
 }
 
-=head3
-returns the given path
-=cut
 sub albumReq
 {
 	my $self = shift;
@@ -159,9 +141,6 @@ sub albumReq
 	return $path;
 }
 
-=head3
-returns a number representing a size (index for @sizes)
-=cut
 sub sizeReq
 {
 	my $self = shift;
@@ -171,14 +150,14 @@ sub sizeReq
 }
 
 
-=head2
+=head2 runmodes
 
-runmodes
+the public runmodes, accessable via the C<rm> parameter
 
-=cut
+=head3 image
 
-=head3 view_image
-returns a thumbnail
+shows a thumbnail
+
 =cut
 sub view_image
 {
@@ -188,12 +167,14 @@ sub view_image
 	my $size = $self->{sizes}->[$self->sizeReq];
 
 	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
-	
+
 	return $self->binary($item, $size);
 }
 
-=head3 view_original
-view original file
+=head3 original
+
+shows the original file
+
 =cut
 sub view_original
 {
@@ -204,10 +185,14 @@ sub view_original
 	return $self->binary($item);
 }
 
+=head3 view
+
+shows a album/folder
+
+=cut
 sub view_path
 {
 	my $self = shift;
-	use Data::Dumper;
 	my $path = $self->albumReq;
 	my $size_idx = $self->sizeReq;
 	my %sizes =
@@ -248,31 +233,27 @@ sub binary
 	my $item = shift;
 	my $size = shift;
 
-	
+
 	if ($size)
 	{
-		$self->header_add( -'Content-disposition' => 'inline' );
+		# $self->header_add( -'Content-disposition' => 'inline' );
 		return $self->stream_file($item->thumbnail($size)) ? undef : $self->error_mode;
 	} else
 	{
-		$self->header_add( -attachment => "hugo-$item->{file}" );
+		# $self->header_add( -attachment => $item->{file} );
 		return $self->stream_file($item->original) ? undef : $self->error_mode;
 	}
-
-#	my $mime = $self->{cache}->{mime}->{$path} if $path;
-#
-#	unless ($mime)
-#	{
-#		use MIME::Types;
-#		my $mt = MIME::Types->new();
-#		warn "trying to guess mime type for $path";
-#		$mime = $mt->mimeTypeOf($path) or die "$!";
-#
-#		$self->{cache}->{mime}->{$path} = $mime if $path;
-#	} 
-#	warn "mime type for $path: $mime";
-#	$self->header_props ({-type => $mime, -Content_length => -s $path });
-#	return $data;
 }
+
+=head1 AUTHOR
+
+Johannes 'fish' Ziemke <my nickname at cpan org>
+
+
+=head1 SEE ALSO
+
+L<CGI::Application>
+
+=cut
 
 1

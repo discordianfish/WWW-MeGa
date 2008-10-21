@@ -1,7 +1,7 @@
 ---
-abstract: 'A media gallery'
+abstract: 'A MediaGallery'
 author:
-  - 'Johannes ''fish' Ziemke <fish-code@freigeist.org>'
+  - 'Johannes ''fish' Ziemke <my nickname at cpan org>'
 build_requires:
   ExtUtils::MakeMaker: 6.11
 distribution_type: module
@@ -22,6 +22,7 @@ requires:
   CGI::Application: 0
   CGI::Application::Plugin::Config::Simple: 0
   CGI::Application::Plugin::HTCompiled: 0
+  CGI::Application::Plugin::Stream: 0
   File::Basename: 0
   File::Path: 0
   File::ShareDir: 0
@@ -29,4 +30,4 @@ requires:
   Image::ExifTool: 0
   Image::Magick: 0
   MIME::Types: 0
-version: 0.01
+version: 0.09_1

@@ -1,7 +1,8 @@
 package WWW::MeGa::Item::Folder;
 use WWW::MeGa::Item;
 our @ISA = qw(WWW::MeGa::Item);
-use strict;
+
+our $VERSION = '0.09_1';
 
 sub thumbnail_source
 {
@@ -9,7 +10,7 @@ sub thumbnail_source
 	my $thumb = File::Spec->catdir($self->{path}, $self->{config}->param('album_thumb'));
 
 	return $thumb if -e $thumb;
-	warn "$thumb not found, autoselecting";
+	warn "$thumb not found, autoselecting" if $self->{config}->param('debug');
 	my $first = $self->first or return undef;
 	my $item = WWW::MeGa::Item->new($first,$self->{config},$self->{cache});
 	return $item->thumbnail_source;

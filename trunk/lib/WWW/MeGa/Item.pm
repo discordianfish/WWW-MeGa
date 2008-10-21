@@ -3,6 +3,8 @@ use strict;
 use File::Basename;
 package WWW::MeGa::Item;
 
+our $VERSION = '0.09_1';
+
 sub new
 {
 	my $proto = shift;
@@ -46,7 +48,9 @@ sub new
 }
 
 =head2 data
+
 returns necessary data for rendering the template
+
 =cut
 sub data
 {
@@ -63,6 +67,7 @@ sub data
 	$data->{TYPE} = (split(/::/, Scalar::Util::blessed($self)))[-1];
 	return $data;
 }
+
 sub exif
 {
 	my $self = shift;
@@ -74,7 +79,7 @@ sub exif
         use Image::ExifTool;
         my $et = Image::ExifTool->new();
         my %data;
-        warn "reading exif from $self->{path}";
+        warn "reading exif from $self->{path}" if $self->{config}->param('debug');
 	my $exif = $et->ImageInfo((-d $self->{path}) ? $self->thumbnail_source : $self->{path});
 	return undef if $exif->{Error};
 	$self->{cache}->{exif}->{$self->{path}} = $exif;
@@ -82,8 +87,10 @@ sub exif
 }
 
 =head2 thumbnail_sized
+
 makes sure that a thumbnail exists in requested size and returns a path to it
 should not be called directly but through the caching methode
+
 =cut
 sub thumbnail_sized
 {
@@ -99,22 +106,25 @@ sub thumbnail_sized
 
         $ret = $image->Read($img);
                 die $ret if $ret;
-	warn "loaded $img";
+	warn "loaded $img" if $self->{config}->param('debug');
 
         #$ret = $image->Scale($size . 'x' . $size);
 	$ret = $image->Resize($size . 'x' . $size);
                 die $ret if $ret;
-	warn "scaled $img";
+	warn "scaled $img" if $self->{config}->param('debug');
 
 	$ret = $image->AutoOrient();
 		die $ret if $ret;
-	warn "oriented $img";
+	warn "oriented $img" if $self->{config}->param('debug');
 
         return $image->ImageToBlob(magick=>$type);
 }
+
 =head2 thumbnail_source
+
 returns the source for the thumbnail
 thats the original file it that could be scaled via thumbnail_sized
+
 =cut
 sub thumbnail_source
 {
@@ -127,7 +137,9 @@ sub thumbnail_source
 }
 
 =head2 thumbnail
+
 returns the actual thumbnail
+
 =cut
 sub thumbnail
 {
@@ -137,7 +149,7 @@ sub thumbnail
 	my $cache = $self->{config}->param('cache');
 	#my $sized = $self->thumbnail_path($size,$cache) or return undef;
 	my $sized = File::Spec->catdir($cache, $self->{path} . '_' . $size . '.' . $type);
-	warn "sized: $sized";
+	warn "sized: $sized" if $self->{config}->param('debug');
 
 	unless ( -e $sized)
 	{
@@ -155,7 +167,9 @@ sub thumbnail
 }
 
 =head2 original
+
 returns the original file
+
 =cut
 sub original
 {
