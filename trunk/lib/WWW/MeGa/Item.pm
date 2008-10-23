@@ -1,9 +1,10 @@
-#!/usr/bin/perl -w
-use strict;
-use File::Basename;
 package WWW::MeGa::Item;
+use strict;
+use warnings;
 
-our $VERSION = '0.09_1';
+use File::Basename qw(basename dirname);
+
+our $VERSION = '0.09_2';
 
 sub new
 {
@@ -14,8 +15,8 @@ sub new
 	$self->{cache} = shift;
 
         $self->{path} = File::Spec->catfile($self->{config}->param('root'), $self->{path_rel});	# absolute path to filename
-	$self->{file} = File::Basename::basename $self->{path};		# filename
-	$self->{folder} = File::Basename::dirname $self->{path};	# folder
+	$self->{file} = basename $self->{path};		# filename
+	$self->{folder} = dirname $self->{path};	# folder
 
 
         my $type;
@@ -182,7 +183,7 @@ sub prepare_dir
 {
 	my $self = shift;
 	my $file = shift;
-	my $folder = File::Basename::dirname $file;
+	my $folder = dirname $file;
 		
 	unless ( -d $folder )
 	{
