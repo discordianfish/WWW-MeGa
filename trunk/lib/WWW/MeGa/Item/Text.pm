@@ -11,10 +11,11 @@ sub data
 	my ($self, @args) = @_;
 	my $data = $self->SUPER::data($self,@args);
 
-	open FILE, '<', $self->original or die $!;
-	my @f = <FILE>;
-	$data->{CONTENT} = "@f";
-	close FILE;
+	open my $fh, '<', $self->original or die $!;
+	#my @f = <$fh>;
+	$data->{CONTENT} = <$fh>;
+	close $fh;
 	return $data;
 }
-1
+
+1;

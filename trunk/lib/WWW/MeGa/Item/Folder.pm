@@ -13,7 +13,7 @@ sub thumbnail_source
 
 	return $thumb if -e $thumb;
 	warn "$thumb not found, autoselecting" if $self->{config}->param('debug');
-	my $first = $self->first or return undef;
+	my $first = $self->first or return;
 	my $item = WWW::MeGa::Item->new($first,$self->{config},$self->{cache});
 	return $item->thumbnail_source;
 }
@@ -44,6 +44,7 @@ sub first
 		close DIR;
 		return File::Spec->catdir($self->{path_rel},$file);
 	}
-	return undef;
+	return;
 }
-1
+
+1;

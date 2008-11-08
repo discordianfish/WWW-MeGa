@@ -22,5 +22,7 @@ sub thumbnail_source
 		}
 		return $frame;
 	}
-	return undef;
+	return;
 }
+
+1;

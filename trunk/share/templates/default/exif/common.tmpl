@@ -1,4 +1,4 @@
-<TMPL_IF NAME=EXIF>
+<%if EXIF %>
 <table class='exif'>
 <tr><th>Var</th><th>Data</th></tr>
 <tr><td>Date</td><td><%= EXIF.DateTimeOriginal %></td></tr>
@@ -14,4 +14,4 @@
 <tr><td>Measured EV</td><td><%= EXIF.MeasuredEV %></td></tr>
 <tr><td>Lense</td><td><%= EXIF.LensType %></td></tr>
 </table>
-</TMPL_IF>
+<%/if %>
