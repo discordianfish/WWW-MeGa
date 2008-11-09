@@ -133,7 +133,7 @@ sub fileReq
 	return $path
 }
 
-sub albumReq
+sub pathReq
 {
 	my $self = shift;
 	my $path = $self->saneReq('path') || '';
@@ -192,7 +192,7 @@ shows a album/folder
 sub view_path
 {
 	my $self = shift;
-	my $path = $self->albumReq;
+	my $path = $self->pathReq;
 	my $size_idx = $self->sizeReq;
 	my %sizes =
 	(
