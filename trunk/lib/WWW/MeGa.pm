@@ -76,17 +76,19 @@ sub setup
 	{
 		warn "config '$config' not found, consider setting a writable config: PARAMS { config => /path/to/config }";
 		my $cfg = new Config::Simple(syntax=>'simple');
-		$cfg->param('cache', '/tmp/phosy');
+#		$cfg->param('cache', '/tmp/www-mega');
 		$cfg->write($config) or die "could not create config '$config': $!";
 		warn "saved $config";
 	}
 	$self->config_file($config) or die "could not load config '$config': $!";
 
 	$self->{sizes} = $self->config_param('sizes') || [ 120, 600, 800 ];
-	$self->config_param('cache', '/tmp/phosy') unless $self->config_param('cache');
+	$self->config_param('cache', '/tmp/www-mega') unless $self->config_param('cache');
 	$self->config_param('album_thumb', 'THUMBNAIL') unless $self->config_param('album_thumb');
 	$self->config_param('thumb-type', 'png') unless $self->config_param('thumb-type');
 	$self->config_param('root', '/usr/share/pixmaps') unless $self->config_param('root');
+	die $self->config_param('root') . " is no directory" unless -d $self->config_param('root');
+
 	$self->config_param('debug',0) unless $self->config_param('debug');
 	$self->config_param('icons', File::ShareDir::module_dir('WWW::MeGa') . '/icons/') unless $self->config_param('icons');
 
