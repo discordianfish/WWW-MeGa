@@ -26,7 +26,7 @@ while (my $q = new CGI::Fast)
 	my $app = WWW::MeGa->new
 		(
 		 QUERY => $q,
-		 PARAMS => { config => '/var/www/phosy.conf', cache => \%cache },
+		 PARAMS => { config => '/var/www/gallery.conf', cache => \%cache },
 		 TMPL_PATH => "$share/templates/default"
 		);
 	$app->run();

@@ -19,7 +19,7 @@ use WWW::MeGa;
 
 my $webapp = WWW::MeGa->new
 (
-	PARAMS => { config => '/var/www/phosy.conf' },
+	PARAMS => { config => '/var/www/gallery.conf' },
 	TMPL_PATH => "$share/templates/default"
 );
-$webapp->run();
+$webapp->run;
