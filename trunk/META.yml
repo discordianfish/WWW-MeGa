@@ -1,7 +1,7 @@
 ---
 abstract: 'A MediaGallery'
 author:
-  - 'Johannes ''fish' Ziemke <my nickname at cpan org>'
+  - 'Johannes ''fish'' Ziemke <my nickname at cpan org>'
 build_requires:
   ExtUtils::MakeMaker: 6.11
 distribution_type: module
@@ -30,4 +30,4 @@ requires:
   Image::ExifTool: 0
   Image::Magick: 0
   MIME::Types: 0
-version: 0.09_1
+version: 0.09_2

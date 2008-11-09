@@ -5,3 +5,6 @@ share\/templates\/lightbox
 Makefile$
 Makefile-MakeMaker.PL
 MANIFEST\.
+blib\/
+\.tar\.gz
+share/templates/default/flash-
