@@ -194,6 +194,12 @@ sub view_path
 	my $self = shift;
 	my $path = $self->pathReq;
 	my $size_idx = $self->sizeReq;
+	my $off;
+	{
+		my $tmp = $self->query->param('off');
+		$off = $tmp if $tmp && ($tmp eq 'next' || $tmp eq 'prev');
+	}
+
 	my %sizes =
 	(
 		SIZE => $size_idx,
@@ -201,10 +207,18 @@ sub view_path
 		SIZE_OUT => $size_idx-1
 	);
 
-	my $item = WWW::MeGa::Item->new($path,$self->config,$self->{cache});
-
 	my @path_e = File::Spec->splitdir($path);
 	my $parent = File::Spec->catdir(@path_e[0 .. @path_e-2]); # bei file: album des files, bei folder: enthaltener folder
+
+	if ($off)
+	{
+		my $pitem = WWW::MeGa::Item->new($parent,$self->config,$self->{cache}); # should be a folder in every case;
+		my @n = $pitem->neighbours($path, $off);
+		$path = $off eq 'next' ? $n[1] : $n[0];
+	}
+
+	my $item = WWW::MeGa::Item->new($path,$self->config,$self->{cache});
+
 
 
 	my $t;
@@ -212,7 +226,7 @@ sub view_path
 	{
 		$t = $self->load_tmpl('album.tmpl', die_on_bad_params=>0, global_vars=>1);
 		my @items = map { (WWW::MeGa::Item->new($_,$self->config(),$self->{cache}))->data } $item->list;
-		$t->param(PARENT => $parent, %sizes, ITEMS => \@items, CONFIG => { $self->config->vars });
+		$t->param(PARENT => $parent, %sizes, %{ $item->data }, ITEMS => \@items, CONFIG => { $self->config->vars });
 
 	} else
 	{

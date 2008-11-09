@@ -38,10 +38,30 @@
 			{
 				border: 1px solid red;
 			}
+			.parent
+			{
+				float: right;
+			}
+			.off
+			{
+				border: 1px solid gray;
+				position: fixed;
+			}
+			.next
+			{
+				padding-left: 10em;
+			}
 			pre
 			{
 				border: 1px dotted gray;
 			}
+
 		</style>
 	</head>
 	<body>
+	<a href="?path=<%= PARENT %>">back to <%= PARENT %></a><br />
+	<span class='off'>
+		<a class='prev' href="?size=<%= SIZE %>;path=<%= PATH_REL %>;off=prev">Previous</a>
+		<a class='next' href="?size=<%= SIZE %>;path=<%= PATH_REL %>;off=next">Next</a>
+	</span>
+
