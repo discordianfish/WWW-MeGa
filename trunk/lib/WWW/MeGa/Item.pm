@@ -5,7 +5,7 @@ use warnings;
 use Carp qw(confess);
 use File::Basename qw(basename dirname);
 
-our $VERSION = '0.09_2';
+our $VERSION = '0.09_3';
 
 sub new
 {

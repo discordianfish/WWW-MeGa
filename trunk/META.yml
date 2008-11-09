@@ -30,4 +30,4 @@ requires:
   Image::ExifTool: 0
   Image::Magick: 0
   MIME::Types: 0
-version: 0.09_2
+version: 0.09_3

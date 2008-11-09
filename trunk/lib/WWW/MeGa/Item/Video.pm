@@ -4,7 +4,7 @@ use warnings;
 
 use base 'WWW::MeGa::Item';
 
-our $VERSION = '0.09_2';
+our $VERSION = '0.09_3';
 
 sub thumbnail_source
 {
