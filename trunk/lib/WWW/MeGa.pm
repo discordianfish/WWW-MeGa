@@ -65,7 +65,7 @@ use WWW::MeGa::Item;
 
 use Carp qw(confess);
 
-our $VERSION = '0.09_1';
+our $VERSION = '0.09_2';
 sub setup
 {
 	my $self = shift;
