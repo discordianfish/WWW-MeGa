@@ -39,7 +39,8 @@ sub new
                 $class = 'WWW::MeGa::Item::Other';
                 require WWW::MeGa::Item::Other or confess "$class: $! (@INC)";
         }
-	
+
+	$self->{type} = $type;
 
 	bless $self, $class;
 	return $self;
@@ -97,7 +98,7 @@ sub thumbnail_sized
 	my $self = shift;
 	my $size = shift;
 	my $type = shift;
-	my $img = $self->thumbnail_source or die "no thumbnail source for $self->{path}";
+	my $img = $self->thumbnail_source or die "no thumbnail source for $self->{path}, type: $self->{type}";
 	my $ret;
 
         my $image = Image::Magick->new;
@@ -127,7 +128,7 @@ thats the original file it that could be scaled via thumbnail_sized
 sub thumbnail_source
 {
 	my $self = shift;
-	return File::Spec->catdir($self->{config}->param('icons'), Scalar::Util::blessed($self) .'.'. ($self->{config}->param('icons-type') || 'png') );
+	return File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ($self->{config}->param('icons-type') || 'png') );
 	#use Scalar::Util qw(blessed);
 	#return undef;
 	
