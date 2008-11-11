@@ -39,13 +39,15 @@ to care about setting up picture/thumb dirs.
 
 =back
 
+
 =head1 CONFIG
+
 L<WWW::MeGa> uses L<CGI::Application::Plugin::Config::Simple> for config handling.
 You can specify the path to a (writable) config file in the new methode of WWW::MeGa:
 
    my $gallery = WWW::MeGa->new(PARAMS => { config => '/path/to/gallery.conf' })
 
-It defaults to $RealBin/gallery.conf, see L<RealBin> for more info.
+It defaults to $RealBin/gallery.conf, see L<FindBin> for more info.
 After the first run it will create a config containing the defaults.
 
 
@@ -71,19 +73,19 @@ installation.
 =head3 sizes
 
 A array of valid "thumbnail"/resized image sizes, defaults to
-[ 120, 600, 800 ].
+C<[ 120, 600, 800 ]>.
 The CGI parameter C<size> is the index to that array.
 
 
 =head3 debug
 
-If set to 1, enabled debugging to your servers error log.
+If set to 1, enabled debugging to your server's error log.
 
 
 =head3 album_thumb
 
 Specify the name of the image which will be used as a thumbnail for the
-containing album, defaults to THUMBNAIL.
+containing album, defaults to C<THUMBNAIL>.
 
 So if you want to have the image C<foo.jpg> be the thumbnail for the album C<bar>, copy it to C<bar/THUMBNAIL> (or use a symlink)
 
@@ -112,7 +114,7 @@ use WWW::MeGa::Item;
 
 use Carp;
 
-our $VERSION = '0.09_3';
+our $VERSION = '0.09_4';
 sub setup
 {
 	my $self = shift;

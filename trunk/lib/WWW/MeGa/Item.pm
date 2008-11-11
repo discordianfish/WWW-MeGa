@@ -15,17 +15,20 @@ WWW::MeGa::Item - Representing a item in L<WWW::MeGa>
 =head1 DESCRIPTION
 
 WWW::MeGa::Item represents a "item" in L<WWW::MeGa>.
-It get instanced by passed a relative path to a arbitrary file and return on of the following specific object based on the mime type:
+
+Passing a relative path to a arbitrary file to the new-method will
+return one of the following specific objects based on the mime type:
 
 =over
 
 =item * L<WWW::MeGa::Item::Audio>
 
-=item * L<WWW::MeGa::Item::Folder> - represents a album
+=item * L<WWW::MeGa::Item::Folder> - represents an album
 
 =item * L<WWW::MeGa::Item::Image>
 
-=item * L<WWW::MeGa::Item::Other> - represents a item for which no specific object was found
+=item * L<WWW::MeGa::Item::Other> - represents an item for which no
+specific object was found
 
 =item * L<WWW::MeGa::Item::Text>
 
@@ -41,13 +44,13 @@ It get instanced by passed a relative path to a arbitrary file and return on of 
 use Carp qw(confess);
 use File::Basename qw(basename dirname);
 
-our $VERSION = '0.09_3';
+our $VERSION = '0.09_4';
 
 =head2 new($relative_path, $config, $cache)
 
-creates a new WWW::MeGa::Item::* object based on mime type of the file specified by $relative_path.
+creates a new WWW::MeGa::Item::* object based on the mime type of the file specified by $relative_path.
 
-$config is a Config::Simple object, containing amongst other things the root-path to build a absolute path.
+$config is a Config::Simple object, containing, amongst other things, the root-path to build the absolute path.
 
 $cache is a hash reference to cache the exif data
 

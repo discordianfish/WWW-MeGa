@@ -18,7 +18,7 @@ See L<WWW::MeGa::Item>
 
 use base 'WWW::MeGa::Item';
 
-our $VERSION = '0.09_3';
+our $VERSION = '0.09_4';
 
 
 =head2 thumbnail_source
@@ -67,7 +67,7 @@ sub list
 
 =head2 first
 
-returns the first file of the directory
+returns the first file of the directory.
 
 =cut
 
@@ -84,9 +84,9 @@ sub first
 	return;
 }
 
-=head 3 neighbours($path)
+=head3 neighbours($path)
 
-return the item before and after the item specified by $path in the directory
+return the item before and after the item specified by $path in the represented directory.
 
 =cut
 

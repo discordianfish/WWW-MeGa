@@ -17,12 +17,12 @@ See L<WWW::MeGa::Item>
 
 use base 'WWW::MeGa::Item';
 
-our $VERSION = '0.09_3';
+our $VERSION = '0.09_4';
 
 
 =head1 data
 
-gets the common data from C<$self->SUPER::data>, puts the text file
+gets the common data from C<SUPER::data>, puts the text file
 content in C<$data->{CONTENT}> and return the data.
 
 =cut
