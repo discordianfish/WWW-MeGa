@@ -9,3 +9,5 @@ blib\/
 \.tar\.gz
 share/templates/default/flash-
 examples/gallery-standalone.pl
+lib/WWW/MeGa/Plugin.pm
+mkdist.sh
