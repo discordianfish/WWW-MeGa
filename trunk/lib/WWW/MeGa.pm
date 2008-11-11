@@ -1,4 +1,5 @@
 package WWW::MeGa;
+use 5.6.0;
 use strict;
 use warnings;
 
@@ -332,14 +333,22 @@ sub binary
 	}
 }
 
-=head1 AUTHOR
+=head1 COPYRIGHT
 
-Johannes 'fish' Ziemke <my nickname at cpan org>
+Copyright 2008 by Johannes 'fish' Ziemke.
+
+This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 
 =head1 SEE ALSO
 
 L<CGI::Application>
+
+
+=head1 AUTHOR
+
+Johannes 'fish' Ziemke <my nickname at cpan org>
+
 
 =cut
 
