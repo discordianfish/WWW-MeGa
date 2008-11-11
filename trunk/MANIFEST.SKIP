@@ -8,3 +8,4 @@ MANIFEST\.
 blib\/
 \.tar\.gz
 share/templates/default/flash-
+examples/gallery-standalone.pl

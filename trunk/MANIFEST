@@ -1,9 +1,5 @@
 examples/gallery.cgi
-examples/gallery.conf
 examples/gallery.fcgi
-examples/images/biene.jpg
-examples/images/moeve.jpg
-examples/images/steine.jpg
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -13,6 +9,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Share.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
+lib/gallery.conf
 lib/WWW/MeGa.pm
 lib/WWW/MeGa/Item.pm
 lib/WWW/MeGa/Item/Audio.pm
@@ -30,6 +27,9 @@ share/icons/denied.png
 share/icons/missing.png
 share/icons/Other.png
 share/icons/Text.png
+share/images/biene.jpg
+share/images/moeve.jpg
+share/images/steine.jpg
 share/templates/default/album.tmpl
 share/templates/default/error.tmpl
 share/templates/default/exif/common.tmpl

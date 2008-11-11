@@ -103,6 +103,7 @@ use CGI::Application;
 use File::Spec;
 use Scalar::Util;
 use File::ShareDir;
+use FindBin qw($RealBin);
 
 use base ("CGI::Application::Plugin::HTCompiled", "CGI::Application");
 
@@ -111,34 +112,56 @@ use CGI::Application::Plugin::Stream (qw/stream_file/);
 
 use WWW::MeGa::Item;
 
-use Carp qw(confess);
+use Carp;
 
 our $VERSION = '0.09_3';
 sub setup
 {
 	my $self = shift;
 	$self->{PathPattern} = "[^-,()'.\/ _0-9A-Za-z\x80-\xff\[\]]";
+	
+	my $share = eval { File::ShareDir::module_dir('WWW::MeGa') } || "$RealBin/../share";
+
 	my $config = $self->config_file($self->param('config') || 'gallery.conf');
+
+	my %default_config =
+	(
+		'sizes' => [ 120, 600, 800 ],
+		'cache' => '/tmp/www-mega',
+		'album_thumb' => 'THUMBNAIL',
+		'thumb-type' => 'png',
+		'root' => File::Spec->catdir($share, 'images'),
+		'debug' => 0,
+		'icons' => File::Spec->catdir($share, 'icons'),
+		'templates' => File::Spec->catdir($share, 'templates', 'default')
+	);
 
 	unless ( -e $config )
 	{
-		warn "config '$config' not found, consider setting a writable config: PARAMS => { config => /path/to/config }";
+		warn "config '$config' not found, creating default config";
 		my $cfg = new Config::Simple(syntax=>'simple');
-#		$cfg->param('cache', '/tmp/www-mega');
-		$cfg->write($config) or die "could not create config '$config': $!";
-		warn "saved $config";
+		foreach my $k (keys %default_config)
+		{
+			$cfg->param($k, $default_config{$k})
+		}
+
+		warn "saving $config";
+		$cfg->write($config) or croak "could not create config '$config': $!";
 	}
-	$self->config_file($config) or die "could not load config '$config': $!";
 
-	$self->{sizes} = $self->config_param('sizes') || [ 120, 600, 800 ];
-	$self->config_param('cache', '/tmp/www-mega') unless $self->config_param('cache');
-	$self->config_param('album_thumb', 'THUMBNAIL') unless $self->config_param('album_thumb');
-	$self->config_param('thumb-type', 'png') unless $self->config_param('thumb-type');
-	$self->config_param('root', '/usr/share/pixmaps') unless $self->config_param('root');
-	die $self->config_param('root') . " is no directory" unless -d $self->config_param('root');
+	$self->config_file($config) or croak "could not load config '$config': $!";
 
-	$self->config_param('debug',0) unless $self->config_param('debug');
-	$self->config_param('icons', File::ShareDir::module_dir('WWW::MeGa') . '/icons/') unless $self->config_param('icons');
+	foreach my $k (keys %default_config)
+	{
+		next if $self->config_param($k);
+		$self->config_param($k, $default_config{$k});
+	}
+
+	croak $self->config_param('root') . " is no directory" unless -d $self->config_param('root');
+
+	$self->tmpl_path($self->config_param('templates'));
+
+	$self->{sizes} = $self->config_param('sizes');
 
 	$self->{cache} = $self->param('cache');
 

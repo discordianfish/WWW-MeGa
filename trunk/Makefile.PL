@@ -3,6 +3,9 @@ use inc::Module::Install;
 
 name		'WWW-MeGa';
 all_from	'lib/WWW/MeGa.pm';
+requires	'Carp' => 0;
+requires	'FindBin' => 0;
+requires	'Scalar::Util' => 0;
 requires	'CGI::Application' => 0;
 requires	'CGI::Application::Plugin::HTCompiled' => 0;
 requires	'CGI::Application::Plugin::Config::Simple' => 0;
