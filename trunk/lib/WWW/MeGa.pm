@@ -10,15 +10,7 @@ WWW::MeGa - A MediaGallery
 
  use WWW::MeGa;
  my $webapp = WWW::MeGa->new
- (
-	PARAMS => { config => /path/to/your/config }
- );
  $webapp->run;
-
-Minimal config:
-
-	root /path/to/your/pictures
-
 
 =head1 DESCRIPTION
 
@@ -48,8 +40,13 @@ to care about setting up picture/thumb dirs.
 
 =head1 CONFIG
 L<WWW::MeGa> uses L<CGI::Application::Plugin::Config::Simple> for config handling.
-You need to specify the path to a (writable) config file in the new methode of WWW::MeGa.
+You can specify the path to a (writable) config file in the new methode of WWW::MeGa:
+
+   my $gallery = WWW::MeGa->new(PARAMS => { config => '/path/to/gallery.conf' })
+
+It defaults to $RealBin/gallery.conf, see L<RealBin> for more info.
 After the first run it will create a config containing the defaults.
+
 
 =head2 Parameters
 
@@ -90,9 +87,9 @@ containing album, defaults to THUMBNAIL.
 So if you want to have the image C<foo.jpg> be the thumbnail for the album C<bar>, copy it to C<bar/THUMBNAIL> (or use a symlink)
 
 
-=head3 icons
+=head3 icons and templates
 
-Path to the icons, defaults to C<icons/> in the module's share dir as defined by L<Module::Install> and L<File::ShareDir>
+Path to the icons and templates, defaults to C<icons/> in the module's share dir as defined by L<Module::Install> and L<File::ShareDir>
 
 
 =head1 METHODES
@@ -122,7 +119,7 @@ sub setup
 	
 	my $share = eval { File::ShareDir::module_dir('WWW::MeGa') } || "$RealBin/../share";
 
-	my $config = $self->config_file($self->param('config') || 'gallery.conf');
+	my $config = $self->config_file($self->param('config') || "$RealBin/gallery.conf");
 
 	my %default_config =
 	(

@@ -2,9 +2,33 @@ package WWW::MeGa::Item::Folder;
 use strict;
 use warnings;
 
+=head1 NAME
+
+WWW::MeGa::Item::Folder - Representing a folder / album in L<WWW::MeGa>
+
+
+=head1 DESCRIPTION
+
+See L<WWW::MeGa::Item>
+
+=head1 CHANGED METHODS
+
+=cut
+
+
 use base 'WWW::MeGa::Item';
 
 our $VERSION = '0.09_3';
+
+
+=head2 thumbnail_source
+
+looks for a file named by the C<album_thumb> config parameter, defaults
+to C<THUMBNAIL> in this folder and return it if found.
+
+If not, select the first item of the directory as thumbnail.
+
+=cut
 
 sub thumbnail_source
 {
@@ -17,6 +41,13 @@ sub thumbnail_source
 	my $item = WWW::MeGa::Item->new($first,$self->{config},$self->{cache});
 	return $item->thumbnail_source;
 }
+
+
+=head2 list
+
+returns a list of all files in the directory.
+
+=cut
 
 sub list
 {
@@ -34,6 +65,12 @@ sub list
 	return sort @dir
 }
 
+=head2 first
+
+returns the first file of the directory
+
+=cut
+
 sub first
 {
 	my $self = shift;
@@ -47,9 +84,9 @@ sub first
 	return;
 }
 
-=head 3 neighbours(file)
+=head 3 neighbours($path)
 
-return the next and previous file/folder of the given path
+return the item before and after the item specified by $path in the directory
 
 =cut
 

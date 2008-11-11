@@ -2,10 +2,56 @@ package WWW::MeGa::Item;
 use strict;
 use warnings;
 
+=head1 NAME
+
+WWW::MeGa::Item - Representing a item in L<WWW::MeGa>
+
+=head1 SYNOPSIS
+
+ use WWW::MeGa::Item;
+ my $item = WWW::MeGa::Item->new('some/file.jpg', $config, $cache);
+ print $item->thumbnail(1);
+
+=head1 DESCRIPTION
+
+WWW::MeGa::Item represents a "item" in L<WWW::MeGa>.
+It get instanced by passed a relative path to a arbitrary file and return on of the following specific object based on the mime type:
+
+=over
+
+=item * L<WWW::MeGa::Item::Audio>
+
+=item * L<WWW::MeGa::Item::Folder> - represents a album
+
+=item * L<WWW::MeGa::Item::Image>
+
+=item * L<WWW::MeGa::Item::Other> - represents a item for which no specific object was found
+
+=item * L<WWW::MeGa::Item::Text>
+
+=item * L<WWW::MeGa::Item::Video>
+
+=back
+
+
+=head1 METHODS
+
+=cut
+
 use Carp qw(confess);
 use File::Basename qw(basename dirname);
 
 our $VERSION = '0.09_3';
+
+=head2 new($relative_path, $config, $cache)
+
+creates a new WWW::MeGa::Item::* object based on mime type of the file specified by $relative_path.
+
+$config is a Config::Simple object, containing amongst other things the root-path to build a absolute path.
+
+$cache is a hash reference to cache the exif data
+
+=cut
 
 sub new
 {
@@ -46,11 +92,13 @@ sub new
 	return $self;
 }
 
+
 =head2 data
 
 returns necessary data for rendering the template
 
 =cut
+
 sub data
 {
 
@@ -66,6 +114,13 @@ sub data
 	$data->{TYPE} = (split(/::/, Scalar::Util::blessed($self)))[-1];
 	return $data;
 }
+
+
+=head2 exif
+
+read, return and cache the exif data for the represented file
+
+=cut
 
 sub exif
 {
@@ -85,12 +140,14 @@ sub exif
 	return $exif;
 }
 
-=head2 thumbnail_sized
 
-makes sure that a thumbnail exists in requested size and returns a path to it
-should not be called directly but through the caching methode
+=head2 thumbnail_sized($size, $type)
+
+makes sure that a thumbnail exists (calls C<$self->thumbnail> in case its not) in requested size and returns a path to it.
+Should not be called directly but through the caching methode
 
 =cut
+
 sub thumbnail_sized
 {
 	use Image::Magick;
@@ -119,27 +176,30 @@ sub thumbnail_sized
         return $image->ImageToBlob(magick=>$type);
 }
 
+
 =head2 thumbnail_source
 
-returns the source for the thumbnail
-thats the original file it that could be scaled via thumbnail_sized
+returns the source for the thumbnail.
+Thats the original file that can be scaled via thumbnail_sized. Think
+of it as a image represenation for the file type.
+This methode selects a icon based on the mime type. But this methode
+gets overwritten for images and videos to have a real thumbnail.
 
 =cut
+
 sub thumbnail_source
 {
 	my $self = shift;
 	return File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ($self->{config}->param('icons-type') || 'png') );
-	#use Scalar::Util qw(blessed);
-	#return undef;
-	
-	#return $self->{config}->param('icons'), $class
 }
 
-=head2 thumbnail
+
+=head2 thumbnail($size)
 
 returns the actual thumbnail
 
 =cut
+
 sub thumbnail
 {
 	my $self = shift;
@@ -165,11 +225,13 @@ sub thumbnail
 	return $sized;
 }
 
+
 =head2 original
 
 returns the original file
 
 =cut
+
 sub original
 {
 	my $self = shift;

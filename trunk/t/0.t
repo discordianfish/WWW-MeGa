@@ -5,7 +5,7 @@ use_ok('WWW::MeGa');
 
 my $cgi;
 
-ok($cgi = WWW::MeGa->new, 'instanced');
+ok($cgi = WWW::MeGa->new( PARAMS => { config => '/tmp/gallery.conf' }), 'instanced');
 ok($cgi->run, 'run');
 ok($cgi->view_path, 'view path w/o path');
 
@@ -26,4 +26,4 @@ ok(sub
 	$cgi->run;
 }, 'view image "/moeve.jpg" (involves thumb generating)');
 
-unlink 'gallery.conf';
+unlink '/tmp/gallery.conf';

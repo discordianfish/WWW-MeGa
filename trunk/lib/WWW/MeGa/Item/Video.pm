@@ -2,9 +2,30 @@ package WWW::MeGa::Item::Video;
 use strict;
 use warnings;
 
+=head1 NAME
+
+WWW::MeGa::Item::Video - Representing a video in L<WWW::MeGa>
+
+
+=head1 DESCRIPTION
+
+See L<WWW::MeGa::Item>
+
+=head1 CHANGED METHODS
+
+=cut
+
 use base 'WWW::MeGa::Item';
 
 our $VERSION = '0.09_3';
+
+
+=head2 thumbnail_source
+
+extracts a frame from the video file and place it in the thumbnail-dir for
+creating thumbnails of it. After that it return the path to that file.
+
+=cut
 
 sub thumbnail_source
 {
