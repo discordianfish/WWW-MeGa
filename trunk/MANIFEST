@@ -9,7 +9,6 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Share.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
-lib/gallery.conf
 lib/WWW/MeGa.pm
 lib/WWW/MeGa/Item.pm
 lib/WWW/MeGa/Item/Audio.pm
