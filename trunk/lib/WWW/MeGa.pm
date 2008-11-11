@@ -6,9 +6,9 @@ use warnings;
 
 WWW::MeGa - A MediaGallery
 
-
 =head1 SYNOPSIS
 
+ use WWW::MeGa;
  my $webapp = WWW::MeGa->new
  (
 	PARAMS => { config => /path/to/your/config }
@@ -46,6 +46,54 @@ to care about setting up picture/thumb dirs.
 
 =back
 
+=head1 CONFIG
+L<WWW::MeGa> uses L<CGI::Application::Plugin::Config::Simple> for config handling.
+You need to specify the path to a (writable) config file in the new methode of WWW::MeGa.
+After the first run it will create a config containing the defaults.
+
+=head2 Parameters
+
+=head3 root
+
+Path to your images
+
+
+=head3 cache
+
+Path where to store the thumbnails
+
+=head3 thumb-type
+
+Type of the thumbnails.
+L<WWW::MeGa> uses L<Image::Magick> for generating thumbnails.
+See C<convert -list format> for file types supported by you ImageMagick
+installation.
+
+
+=head3 sizes
+
+A array of valid "thumbnail"/resized image sizes, defaults to
+[ 120, 600, 800 ].
+The CGI parameter C<size> is the index to that array.
+
+
+=head3 debug
+
+If set to 1, enabled debugging to your servers error log.
+
+
+=head3 album_thumb
+
+Specify the name of the image which will be used as a thumbnail for the
+containing album, defaults to THUMBNAIL.
+
+So if you want to have the image C<foo.jpg> be the thumbnail for the album C<bar>, copy it to C<bar/THUMBNAIL> (or use a symlink)
+
+
+=head3 icons
+
+Path to the icons, defaults to C<icons/> in the module's share dir as defined by L<Module::Install> and L<File::ShareDir>
+
 
 =head1 METHODES
 
@@ -74,7 +122,7 @@ sub setup
 
 	unless ( -e $config )
 	{
-		warn "config '$config' not found, consider setting a writable config: PARAMS { config => /path/to/config }";
+		warn "config '$config' not found, consider setting a writable config: PARAMS => { config => /path/to/config }";
 		my $cfg = new Config::Simple(syntax=>'simple');
 #		$cfg->param('cache', '/tmp/www-mega');
 		$cfg->write($config) or die "could not create config '$config': $!";
@@ -158,6 +206,7 @@ the public runmodes, accessable via the C<rm> parameter
 shows a thumbnail
 
 =cut
+
 sub view_image
 {
 	my $self = shift;
@@ -170,11 +219,13 @@ sub view_image
 	return $self->binary($item, $size);
 }
 
+
 =head3 original
 
 shows the original file
 
 =cut
+
 sub view_original
 {
 	my $self = shift;
@@ -184,11 +235,13 @@ sub view_original
 	return $self->binary($item);
 }
 
+
 =head3 view
 
 shows a album/folder
 
 =cut
+
 sub view_path
 {
 	my $self = shift;
