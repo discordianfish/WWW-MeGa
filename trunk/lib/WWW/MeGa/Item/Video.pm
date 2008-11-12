@@ -1,3 +1,4 @@
+# $Id$
 package WWW::MeGa::Item::Video;
 use strict;
 use warnings;

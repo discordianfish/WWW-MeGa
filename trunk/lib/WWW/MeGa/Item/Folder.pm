@@ -1,3 +1,4 @@
+# $Id$
 package WWW::MeGa::Item::Folder;
 use strict;
 use warnings;

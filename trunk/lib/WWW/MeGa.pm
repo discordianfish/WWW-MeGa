@@ -1,5 +1,5 @@
-package WWW::MeGa;
 # $Id$
+package WWW::MeGa;
 use 5.6.0;
 use strict;
 use warnings;

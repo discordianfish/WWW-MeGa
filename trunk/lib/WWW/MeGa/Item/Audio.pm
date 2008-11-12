@@ -1,3 +1,4 @@
+# $Id$
 package WWW::MeGa::Item::Audio;
 use strict;
 use warnings;

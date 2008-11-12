@@ -1,3 +1,4 @@
+# $Id$
 package WWW::MeGa::Item::Text;
 use strict;
 use warnings;

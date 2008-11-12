@@ -1,3 +1,4 @@
+# $Id$
 package WWW::MeGa::Item::Other;
 use strict;
 use warnings;

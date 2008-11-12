@@ -1,3 +1,4 @@
+# $Id$
 package WWW::MeGa::Item::Image;
 use strict;
 use warnings;
