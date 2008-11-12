@@ -5,7 +5,7 @@ use warnings;
 
 =head1 NAME
 
-WWW::MeGa - A MediaGallery
+WWW::MeGa - A MediaGallery $Version$
 
 =head1 SYNOPSIS
 
@@ -15,7 +15,7 @@ WWW::MeGa - A MediaGallery
 
 =head1 DESCRIPTION
 
-WWW::MeGa is a web based media browser. It should
+WWW::MeGa is a web based media gallery. It should
 be run from mod_perl or FastCGI (see examples/gallery.fcgi) because
 it uses some runtime caching.
 
@@ -39,6 +39,9 @@ to care about setting up picture/thumb dirs.
 
 =back
 
+=head1 INSTALLATION
+
+TBD
 
 =head1 CONFIG
 
