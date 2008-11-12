@@ -5,7 +5,7 @@ use warnings;
 
 =head1 NAME
 
-WWW::MeGa - A MediaGallery $Version$
+WWW::MeGa - A MediaGallery $Date$
 
 =head1 SYNOPSIS
 
