@@ -1,11 +1,12 @@
 package WWW::MeGa;
+# $Id$
 use 5.6.0;
 use strict;
 use warnings;
 
 =head1 NAME
 
-WWW::MeGa - A MediaGallery $Date$
+WWW::MeGa - A MediaGallery
 
 =head1 SYNOPSIS
 
