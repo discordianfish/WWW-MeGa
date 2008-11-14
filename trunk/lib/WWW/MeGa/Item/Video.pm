@@ -7,7 +7,6 @@ use warnings;
 
 WWW::MeGa::Item::Video - Representing a video in L<WWW::MeGa>
 
-
 =head1 DESCRIPTION
 
 See L<WWW::MeGa::Item>

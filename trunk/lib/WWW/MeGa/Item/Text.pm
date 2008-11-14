@@ -7,7 +7,6 @@ use warnings;
 
 WWW::MeGa::Item::Text - Representing a text file in L<WWW::MeGa>
 
-
 =head1 DESCRIPTION
 
 See L<WWW::MeGa::Item>

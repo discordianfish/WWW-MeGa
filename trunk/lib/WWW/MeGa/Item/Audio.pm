@@ -7,7 +7,6 @@ use warnings;
 
 WWW::MeGa::Item::Audio - Representing a audio file in L<WWW::MeGa>
 
-
 =head1 DESCRIPTION
 
 See L<WWW::MeGa::Item>

@@ -7,7 +7,6 @@ use warnings;
 
 WWW::MeGa::Item::Folder - Representing a folder / album in L<WWW::MeGa>
 
-
 =head1 DESCRIPTION
 
 See L<WWW::MeGa::Item>
@@ -85,7 +84,7 @@ sub first
 	return;
 }
 
-=head3 neighbours($path)
+=head2 neighbours($path)
 
 return the item before and after the item specified by $path in the represented directory.
 

@@ -7,7 +7,6 @@ use warnings;
 
 WWW::MeGa::Item::Image - Representing a image in L<WWW::MeGa>
 
-
 =head1 DESCRIPTION
 
 See L<WWW::MeGa::Item>

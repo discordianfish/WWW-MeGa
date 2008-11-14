@@ -7,7 +7,6 @@ use warnings;
 
 WWW::MeGa::Item::Other - Representing every file in L<WWW::MeGa> without a specific object
 
-
 =head1 DESCRIPTION
 
 This is just a pretty empty dummy.
