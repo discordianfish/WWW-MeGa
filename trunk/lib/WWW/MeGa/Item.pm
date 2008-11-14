@@ -44,6 +44,7 @@ specific object was found
 
 use Carp qw(confess);
 use File::Basename qw(basename dirname);
+use constant ICON_TYPE => 'png';
 
 our $VERSION = '0.09_4';
 
@@ -145,10 +146,13 @@ sub exif
 }
 
 
-=head2 thumbnail_sized($size, $type)
+=head2 thumbnail_sized($size)
 
-makes sure that a thumbnail exists (calls C<$self->thumbnail> in case its not) in requested size and returns a path to it.
-Should not be called directly but through the caching methode
+reads C<$self->thumbnail_source> and returns a thumbnail in the
+requested size. If C<$self->thumbnail_source> does not exist, it use
+a icon based on the mime type.
+
+It should not be called directly but through the caching methode C<$self->thumbnail>.
 
 =cut
 
@@ -158,26 +162,29 @@ sub thumbnail_sized
 
 	my $self = shift;
 	my $size = shift;
-	my $type = shift;
-	my $img = $self->thumbnail_source or die "no thumbnail source for $self->{path}, type: $self->{type}";
-	my $ret;
+	my $type = $self->{config}->param('thumb-type');
+	my $img = $self->thumbnail_source;
+
+	$img = File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ICON_TYPE)
+		if !$img or not -r $img;
+
+	my @magick =
+	(
+		[ 'Read', $img ],
+		[ 'Resize', $size . 'x' . $size],
+		[ 'AutoOrient', 1],
+		[ 'ImageToBlob', { magick => $type } ]
+	);
 
         my $image = Image::Magick->new;
+	foreach my $cmd (@magick)
+	{
+		my ($m, $p) = @$cmd;
+		my $ret = $image->$m($p);
+		return $ret if $m eq $magick[@magick-1]->[0];
 
-        $ret = $image->Read($img);
-                die $ret if $ret;
-	warn "loaded $img" if $self->{config}->param('debug');
-
-        #$ret = $image->Scale($size . 'x' . $size);
-	$ret = $image->Resize($size . 'x' . $size);
-                die $ret if $ret;
-	warn "scaled $img" if $self->{config}->param('debug');
-
-	$ret = $image->AutoOrient();
-		die $ret if $ret;
-	warn "oriented $img" if $self->{config}->param('debug');
-
-        return $image->ImageToBlob(magick=>$type);
+		warn $ret and return if $ret;
+	}
 }
 
 
@@ -186,21 +193,21 @@ sub thumbnail_sized
 returns the source for the thumbnail.
 Thats the original file that can be scaled via thumbnail_sized. Think
 of it as a image represenation for the file type.
-This methode selects a icon based on the mime type. But this methode
-gets overwritten for images and videos to have a real thumbnail.
+This method is empty and should be overwritten for images and videos to
+have a real thumbnail.
 
 =cut
 
 sub thumbnail_source
 {
-	my $self = shift;
-	return File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ($self->{config}->param('icons-type') || 'png') );
 }
 
 
 =head2 thumbnail($size)
 
-returns the actual thumbnail
+returns the actual thumbnail.
+If the resized thumb already exist, return the path to that one.
+If no, try to create it first by calling C<$self->thumbnail_sized>
 
 =cut
 
@@ -210,23 +217,23 @@ sub thumbnail
 	my $size = shift;
 	my $type = $self->{config}->param('thumb-type');
 	my $cache = $self->{config}->param('cache');
-	#my $sized = $self->thumbnail_path($size,$cache) or return undef;
 	my $sized = File::Spec->catdir($cache, $self->{path} . '_' . $size . '.' . $type);
 	warn "sized: $sized" if $self->{config}->param('debug');
 
-	unless ( -e $sized)
+	return $sized if -e $sized;
+
+	$self->prepare_dir($sized) or warn "could not create dir for $sized";
+
+	my $data = $self->thumbnail_sized($size);
+
+	if ($data and open my $fh, '>', $sized)
 	{
-		$self->prepare_dir($sized) or warn "could not create dir for $sized";
-
-		my $data = $self->thumbnail_sized($size,$type);
-		return unless $data;
-
-		open my $fh, '>', $sized or warn "could not write thumbnail to $sized"; #FIXME: bin-mode?
+		binmode($fh);
 		print $fh $data;
 		close $fh;
+		return $sized;
 	}
-		
-	return $sized;
+	warn "could not write thumbnail to $sized: $!";
 }
 
 
