@@ -30,11 +30,10 @@ content in C<$data->{CONTENT}> and return the data.
 
 sub data
 {
-	my ($self, @args) = @_;
-	my $data = $self->SUPER::data($self,@args);
+	my $self = shift;
+	my $data = $self->SUPER::data;
 
 	open my $fh, '<', $self->original or die $!;
-	#my @f = <$fh>;
 	$data->{CONTENT} = <$fh>;
 	close $fh;
 	return $data;
