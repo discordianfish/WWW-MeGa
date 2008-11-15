@@ -39,7 +39,7 @@ sub thumbnail_source
 		unless (-e $frame)
 		{
 			$self->prepare_dir($frame) or die "could not create dir for $frame";
-			system('/usr/bin/ffmpeg', '-i', $self->{path}, '-f', 'image2', '-ss', 10, '-vframes', 1, $frame);
+			system('ffmpeg', '-i', $self->{path}, '-f', 'image2', '-ss', 10, '-vframes', 1, $frame);
 		}
 		return $frame;
 	}
