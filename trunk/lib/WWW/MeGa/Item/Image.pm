@@ -17,7 +17,7 @@ See L<WWW::MeGa::Item>
 
 use base 'WWW::MeGa::Item';
 
-our $VERSION = '0.09_5';
+our $VERSION = '0.09_6';
 
 
 =head2 thumbnail_source

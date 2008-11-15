@@ -60,7 +60,7 @@ To install a developer release of WWW::MeGa, use the CPAN-Shell:
 
  perl -MCPAN -eshell
 
-Now you can see all releases with C<ls fish> and install the one you want: C<install FISH/WWW-MeGa-0.09_5.tar.gz>
+Now you can see all releases with C<ls fish> and install the one you want: C<install FISH/WWW-MeGa-0.09_6.tar.gz>
 
 B<WARNING>: Installation via C<cpan> or the CPAN-Shell is only recommended
 if you have a local administered perl installation.  If you installed
@@ -221,7 +221,7 @@ use WWW::MeGa::Item;
 
 use Carp;
 
-our $VERSION = '0.09_5';
+our $VERSION = '0.09_6';
 sub setup
 {
 	my $self = shift;
@@ -264,7 +264,7 @@ sub setup
 
 	foreach my $k (keys %default_config)
 	{
-		next if $self->config_param($k);
+		next if defined $self->config_param($k);
 		$self->config_param($k, $default_config{$k});
 	}
 
