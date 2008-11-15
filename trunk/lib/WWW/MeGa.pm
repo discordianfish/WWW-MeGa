@@ -23,6 +23,8 @@ it uses some runtime caching.
 Every file will be delievered by the CGI itself. So you don't have
 to care about setting up picture/thumb dirs.
 
+To see it in action, visit: http://freigeist.org/gallery
+or http://sophiesfotos.de.
 
 =head1 FEATURES
 
@@ -42,7 +44,73 @@ to care about setting up picture/thumb dirs.
 
 =head1 INSTALLATION
 
-TBD
+=head2 Install the Package
+
+Use your favorite way to install this CPAN-Package and make sure you
+have C<ffmpeg> somewhere in your path (or specify the path in the
+config).
+
+=head3 Use FastCGI (prefered) 
+
+Copy C<examples/gallery.fcgi> somewhere and configure your webserver to
+use it as a FastCGI:
+
+Example for lighttpd:
+
+   fastcgi.server = (
+                        "/gallery" =>
+                        ( "localhost" =>
+                                (
+                                        "socket"        => "/var/run/lighttpd/gallery" + PID + ".socket",
+                                        "check-local"   => "disable",
+                                        "bin-path"      => "/var/www/gallery.fcgi"
+                                )
+                        ),
+   )
+
+=head3 Use CGI
+
+Copy C<examples/gallery.cgi> to your C<cgi-bin/> directory and make
+sure its executable. Now WWW::MeGa should have created a default config
+file. Change 'root' to your images and you are done.
+
+=head3 Config
+
+Make sure the user under which the webserver is running has write
+permission to the config file. The path to the config file defaults to
+to 'gallery.conf' in the same dir as your script. In these cases:
+C</var/www/gallery.conf> (FCGI) and
+C</path/to/your/cgi-bin/gallery.conf>.
+
+You can (and should, at least in the CGI case) specify a custom path to
+the config by changing the scripts to pass:
+
+ PARAMS => { config => '/path/to/your/config' }
+
+to the new method of L<WWW::MeGa>.
+
+=head4 modified gallery.fcgi
+
+ ...
+ my $app = WWW::MeGa->new
+ (
+         QUERY => $q,
+         PARAMS => { cache => \%cache, config => '/path/to/your/config' },
+ );
+ ...
+
+=head4 modified gallery.cgi
+
+ ...
+ my $webapp = WWW::MeGa->new(PARAMS => {config => '/path/to/your/config'});
+ ...
+
+=head2 Test it
+
+Now visit the the URL to you script. (In these examples:
+http://example.com/gallery (FastCGI) and
+http://example.com/cgi-bin/gallery.cgi (CGI)) and you
+should see the example photos. 
 
 =head1 CONFIG
 
@@ -73,6 +141,22 @@ L<WWW::MeGa> uses L<Image::Magick> for generating thumbnails.
 See C<convert -list format> for file types supported by you ImageMagick
 installation.
 
+=head3 video-thumbs
+
+If set to 1, enables video-thumbs. Default: 1
+
+=head3 video-thumbs-offset
+
+specifies which frame to grab in seconds. Default: 10
+
+=head3 exif
+
+If set to 1, enables the extraction of exif-data. Default: 1
+
+=head3 ffmpeg-path
+
+Specify the path to the ffmpeg-binary. Defaults to 'ffmpeg'. (Should be
+looked up in your PATH)
 
 =head3 sizes
 
@@ -118,7 +202,7 @@ use WWW::MeGa::Item;
 
 use Carp;
 
-our $VERSION = '0.09_4';
+our $VERSION = '0.09_5';
 sub setup
 {
 	my $self = shift;
@@ -134,6 +218,10 @@ sub setup
 		'cache' => '/tmp/www-mega',
 		'album_thumb' => 'THUMBNAIL',
 		'thumb-type' => 'png',
+		'video-thumbs' => 1,
+		'video-thumbs-offset' => 10,
+		'exif' => 1,
+		'ffmpeg-path' => 'ffmpeg',
 		'root' => File::Spec->catdir($share, 'images'),
 		'debug' => 0,
 		'icons' => File::Spec->catdir($share, 'icons'),
@@ -341,10 +429,29 @@ sub binary
 
 =head1 COPYRIGHT
 
+=head2 Code
+
 Copyright 2008 by Johannes 'fish' Ziemke.
 
-This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
+=head3 Icons
+
+The shipped icons are copyrighted by the "Tango Desktop Project" and
+are licensed under the Creative Commons Attribution Share-Alike 2.5
+license. See http://creativecommons.org/licenses/by-sa/2.5
+
+=head3 Photos
+
+biene.jpg and steine.jpg are copyrighted by Sophie Bischoff. For
+more, see: http://sophiesfotos.de
+
+moewe.jpg is copyrighted by Johannes 'fish' Ziemke.
+
+The shipped example photos are licensed unter the Creative Commons
+Attribution Share-Alike 3.0 license. See
+http://creativecommons.org/licenses/by-sa/3.0/
 
 =head1 SEE ALSO
 

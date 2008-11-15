@@ -1,5 +1,4 @@
 examples/gallery.cgi
-examples/gallery.conf
 examples/gallery.fcgi
 inc/Module/Install.pm
 inc/Module/Install/Base.pm

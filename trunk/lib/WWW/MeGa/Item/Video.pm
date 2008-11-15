@@ -17,7 +17,7 @@ See L<WWW::MeGa::Item>
 
 use base 'WWW::MeGa::Item';
 
-our $VERSION = '0.09_4';
+our $VERSION = '0.09_5';
 
 
 =head2 thumbnail_source
@@ -39,7 +39,7 @@ sub thumbnail_source
 		unless (-e $frame)
 		{
 			$self->prepare_dir($frame) or die "could not create dir for $frame";
-			system('ffmpeg', '-i', $self->{path}, '-f', 'image2', '-ss', 10, '-vframes', 1, $frame);
+			system($self->{config}->param('ffmpeg-path'), '-i', $self->{path}, '-f', 'image2', '-ss', $self->{config}->param('video-thumbs-offset'), '-vframes', 1, $frame);
 		}
 		return $frame;
 	}

@@ -46,7 +46,7 @@ use Carp qw(confess);
 use File::Basename qw(basename dirname);
 use constant ICON_TYPE => 'png';
 
-our $VERSION = '0.09_4';
+our $VERSION = '0.09_5';
 
 =head2 new($relative_path, $config, $cache)
 
