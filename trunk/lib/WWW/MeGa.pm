@@ -17,14 +17,14 @@ WWW::MeGa - A MediaGallery
 =head1 DESCRIPTION
 
 WWW::MeGa is a web based media gallery. It should
-be run from mod_perl or FastCGI (see examples/gallery.fcgi) because
-it uses some runtime caching.
+be run from FastCGI (see examples/gallery.fcgi) or mod_perl (not yet
+tested) because it uses some runtime caching.
 
 Every file will be delievered by the CGI itself. So you don't have
 to care about setting up picture/thumb dirs.
 
 To see it in action, visit: http://freigeist.org/gallery
-or http://sophiesfotos.de.
+or http://sophiesfotos.de
 
 =head1 FEATURES
 
@@ -38,21 +38,40 @@ or http://sophiesfotos.de.
 
 =item * reads exif tag
 
+=item * very easy to setup (change one path in the config and your done)
+
 =item * templating with L<HTML::Template::Compiled>
 
 =back
 
 =head1 INSTALLATION
 
-=head2 Install the Package
+=head2 Install the package
 
 Use your favorite way to install this CPAN-Package and make sure you
 have C<ffmpeg> somewhere in your path (or specify the path in the
-config).
+config) if you want video thumbnails.
 
-=head3 Use FastCGI (prefered) 
+If you want to install it via the cpan-installer use:
 
-Copy C<examples/gallery.fcgi> somewhere and configure your webserver to
+ cpan WWW::MeGa
+
+To install a developer release of WWW::MeGa, use the CPAN-Shell:
+
+ perl -MCPAN -eshell
+
+Now you can see all releases with C<ls fish> and install the one you want: C<install FISH/WWW-MeGa-0.09_5.tar.gz>
+
+B<WARNING>: Installation via C<cpan> or the CPAN-Shell is only recommended
+if you have a local administered perl installation.  If you installed
+perl from your packet manager you should use the packet manager to
+install this package too. Have a look at C<g-cpan> (Gentoo) and
+C<dh-make-perl> (Debian/Ubuntu).
+
+
+=head3 Use FastCGI (preferred) 
+
+Copy C<examples/gallery.fcgi> to some dir and configure your webserver to
 use it as a FastCGI:
 
 Example for lighttpd:
@@ -351,9 +370,9 @@ sub view_original
 }
 
 
-=head3 view
+=head3 view (DEFAULT RUNMODE)
 
-shows a album/folder
+shows a html page with one or more items
 
 =cut
 
@@ -426,6 +445,23 @@ sub binary
 		return $self->stream_file($item->original) ? undef : $self->error_mode;
 	}
 }
+
+=head1 BUGS, TODO AND NEW FEATURES
+
+I tried to write a clean and elegant app but I'm not a perl guru so
+B<please> bash me about everything you think suck in this project. I'm
+willing to learn and appreciate constructive critic.
+
+If you think this app is cool and you like to see new features please
+let me know!
+
+=head1 THANKS
+
+Thanks to EXP (at least I guess he was it) who suggests me to learn
+perl some years ago.
+
+And thanks alot to the people from irc.perl.org / #perlde for the
+current support.
 
 =head1 COPYRIGHT
 
