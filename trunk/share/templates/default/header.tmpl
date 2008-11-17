@@ -1,4 +1,5 @@
-<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title>Gallery</title>
 		<style type="text/css">
@@ -51,6 +52,7 @@
 			{
 				padding-left: 10em;
 			}
+			.tiny { font-size: tiny; }
 			pre
 			{
 				border: 1px dotted gray;
@@ -59,9 +61,10 @@
 		</style>
 	</head>
 	<body>
-	<a href="?path=<%= PARENT %>">back to <%= PARENT %></a><br />
+	<div class='nav'><a href="?path=<%= PARENT %>">back to <%= PARENT %></a><br />
 	<span class='off'>
 		<a class='prev' href="?size=<%= SIZE %>;path=<%= PATH_REL %>;off=prev">Previous</a>
 		<a class='next' href="?size=<%= SIZE %>;path=<%= PATH_REL %>;off=next">Next</a>
 	</span>
+	</div>
 

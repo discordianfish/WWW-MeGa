@@ -4,7 +4,7 @@
 			<%switch TYPE %>
 				<%case Image %>
 				<a href="?rm=image;size=<%= SIZE_IN %>;path=<%= PATH_REL %>">
-				<img src="?rm=image;size=<%= SIZE %>;path=<%= PATH_REL %>" />
+				<img src="?rm=image;size=<%= SIZE %>;path=<%= PATH_REL %>" alt="<%= NAME %>" />
 				</a>
 				<ul>
 					<li>Size: <%= SIZE %></li>
@@ -16,8 +16,7 @@
 <%= CONTENT %>
 				</pre>
 				<%case default %>
-<!--				<object data="?rm=original;path=<%= PATH_REL %>" type="audio/mpeg" /></object><br /> -->
-				<iframe src="?rm=original;path=<%= PATH_REL %>" /><br />
+				<object data="?rm=original;path=<%= PATH_REL %>" /><br />
 				<a href="?rm=original;path=<%= PATH_REL %>">Download file</a>
 			<%/switch %>
 		</div>

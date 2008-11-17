@@ -4,8 +4,8 @@
 		<%loop ITEMS %>
 			<div class="item">
 				<a href="?path=<%= PATH_REL %>;size=1">
-				<img src="?rm=image;path=<%= PATH_REL %>" /></a>
-				<%unless EXIF.Title %><p class="name"><%= NAME %><p><%/unless %>
+				<img src="?rm=image;path=<%= PATH_REL %>" alt="<%= NAME %>" /></a>
+				<p class="name"><%if EXIF.Title %> <%= EXIF.Title %><%else %><%= NAME %><%/if %></p>
 				<p class="exif-tiny"><%include "exif/tiny.tmpl" %></p>
 				<%switch TYPE %>
 					<%case Audio,Video,Image %><a href="?rm=original;path=<%= PATH_REL %>">Download</a>
