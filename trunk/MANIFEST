@@ -1,3 +1,4 @@
+bin/ping-mega.pl
 examples/gallery.cgi
 examples/gallery.fcgi
 inc/Module/Install.pm
