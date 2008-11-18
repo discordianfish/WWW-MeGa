@@ -153,6 +153,11 @@ Path to your images
 
 Path where to store the thumbnails
 
+=head3 album-thumb
+
+specifies which file should be used a thumbnail for a folder. Defaults to C<THUMBNAIL>.
+The file named like that will be skipped when showing the content of the folder.
+
 =head3 thumb-type
 
 Type of the thumbnails.
@@ -446,6 +451,22 @@ sub binary
 	}
 }
 
+=head1 FAQ
+
+=head2 How do i..
+
+=head3 ..select a image a Folder-Thumbnail?
+
+L<WWW::MeGa> uses the image named C<THUMBNAIL> (or whatever you setup
+for C<album_thumb> in the config) in each folder as its thumbnail. So
+if you want to have the image C<foo/bar.jpg> to be the thumbnail for
+C<foo>, set a symlink called C<foo/THUMBNAIL> to it (or copy it there)
+
+=head3 ..(re)create all thumbnail so that my visitors don't have to wait?
+
+See L<ping-mega.pl> for that.
+
+
 =head1 BUGS, TODO AND NEW FEATURES
 
 I tried to write a clean and elegant app but I'm not a perl guru so
@@ -472,13 +493,13 @@ Copyright 2008 by Johannes 'fish' Ziemke.
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-=head3 Icons
+=head2 Icons
 
 The shipped icons are copyrighted by the "Tango Desktop Project" and
 are licensed under the Creative Commons Attribution Share-Alike 2.5
 license. See http://creativecommons.org/licenses/by-sa/2.5
 
-=head3 Photos
+=head2 Photos
 
 biene.jpg and steine.jpg are copyrighted by Sophie Bischoff. For
 more, see: http://sophiesfotos.de
@@ -491,8 +512,16 @@ http://creativecommons.org/licenses/by-sa/3.0/
 
 =head1 SEE ALSO
 
-L<CGI::Application>
 
+=over
+
+=item * L<ping-mega.pl>
+
+=item * L<WWW::MeGa::Item>
+
+=item * L<CGI::Application>
+
+=back
 
 =head1 AUTHOR
 
