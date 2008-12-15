@@ -226,7 +226,7 @@ use WWW::MeGa::Item;
 
 use Carp;
 
-our $VERSION = '0.09_6';
+our $VERSION = '0.1';
 sub setup
 {
 	my $self = shift;
