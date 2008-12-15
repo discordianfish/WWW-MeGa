@@ -80,6 +80,7 @@ sub new
                 use MIME::Types;
                 my $mt = MIME::Types->new();
                 my $mime = $mt->mimeTypeOf($self->{path});
+		$self->{mime} = $mime;
 
                 $type = $mime ? ucfirst ((split '/', $mime)[0]) : 'Other';
         }

@@ -395,19 +395,21 @@ sub view_path
 
 
 
-	my $t;
+	my %hash = (PARENT => $parent, %sizes, %{ $item->data }, CONFIG => { $self->config->vars }, MIME => $item->{mime});
+	my $template;
+
 	if (Scalar::Util::blessed($item) eq 'WWW::MeGa::Item::Folder')
 	{
-		$t = $self->load_tmpl('album.tmpl', die_on_bad_params=>0, global_vars=>1);
+		$template = 'album.tmpl';
 		my @items = map { (WWW::MeGa::Item->new($_,$self->config(),$self->{cache}))->data } $item->list;
-		$t->param(PARENT => $parent, %sizes, %{ $item->data }, ITEMS => \@items, CONFIG => { $self->config->vars });
-
+		$hash{ITEMS} = \@items;
 	} else
 	{
-		$t = $self->load_tmpl('image.tmpl', die_on_bad_params=>0, global_vars=>1);
-		my %hash = (PARENT => $parent, %sizes, %{ $item->data }, CONFIG => { $self->config->vars });
-		$t->param(%hash);
+		$template = 'image.tmpl';
 	}
+
+	my $t = $self->load_tmpl($template, die_on_bad_params=>0, global_vars=>1);
+	$t->param(%hash);
 
 	return $t->output;
 }
