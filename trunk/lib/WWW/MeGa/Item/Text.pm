@@ -32,7 +32,7 @@ sub data
 	my $self = shift;
 	my $data = $self->SUPER::data;
 
-	open my $fh, '<', $self->original or die $!;
+	open my $fh, '<', $self->{path} or die $!;
 	$data->{CONTENT} = <$fh>;
 	close $fh;
 	return $data;

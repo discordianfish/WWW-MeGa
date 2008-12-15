@@ -285,7 +285,6 @@ sub setup
 	(
 		view => 'view_path',
 		image => 'view_image',
-		original => 'view_original',
 	);
 	$self->start_mode('view');
 	$self->error_mode('view_error');
@@ -308,7 +307,7 @@ sub saneReq
 	my $self = shift;
 	my $param = shift;
 	my $pattern = shift || $self->{PathPattern};
-	my $req = $self->query->param($param) or return;
+	defined(my $req = $self->query->param($param)) or return;
 	$req =~ s/$pattern//g;
 	return $req;
 }
@@ -330,7 +329,7 @@ sub pathReq
 sub sizeReq
 {
 	my $self = shift;
-	my $size = $self->saneReq('size', '[^0-9]') or return 0; #return @{$self->{sizes}}[0];
+	defined ( my $size = $self->saneReq('size', '[^0-9]') ) or return; # 0; #return @{$self->{sizes}}[0];
 	die "no size '$size'" unless $self->{sizes}->[$size];
 	return $size;
 }
@@ -351,27 +350,10 @@ sub view_image
 	my $self = shift;
 	my $path = $self->fileReq;
 
-	my $size = $self->{sizes}->[$self->sizeReq];
+	my $s = $self->sizeReq;
+	my $item = WWW::MeGa::Item->new($path,$self->config,$self->{cache});
 
-	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
-
-	return $self->binary($item, $size);
-}
-
-
-=head3 original
-
-shows the original file
-
-=cut
-
-sub view_original
-{
-	my $self = shift;
-	my $path = $self->fileReq;
-
-	my $item = WWW::MeGa::Item->new($path,$self->config(),$self->{cache});
-	return $self->binary($item);
+	return $self->binary($item, defined $s ? $self->{sizes}->[$s] : undef);
 }
 
 
@@ -385,7 +367,7 @@ sub view_path
 {
 	my $self = shift;
 	my $path = $self->pathReq;
-	my $size_idx = $self->sizeReq;
+	my $size_idx = $self->sizeReq || 0;
 	my $off;
 	{
 		my $tmp = $self->query->param('off');
@@ -439,16 +421,8 @@ sub binary
 	my $item = shift;
 	my $size = shift;
 
-
-	if ($size)
-	{
-		# $self->header_add( -'Content-disposition' => 'inline' );
-		return $self->stream_file($item->thumbnail($size)) ? undef : $self->error_mode;
-	} else
-	{
-		# $self->header_add( -attachment => $item->{file} );
-		return $self->stream_file($item->original) ? undef : $self->error_mode;
-	}
+	$self->header_add( -'Content-disposition' => 'inline' );
+	return $self->stream_file($item->thumbnail($size)) ? undef : $self->error_mode;
 }
 
 =head1 FAQ

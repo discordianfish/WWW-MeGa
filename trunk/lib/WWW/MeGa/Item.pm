@@ -214,7 +214,7 @@ If no, try to create it first by calling C<$self->thumbnail_sized>
 sub thumbnail
 {
 	my $self = shift;
-	my $size = shift;
+	my $size = shift or return $self->{path};
 	my $type = $self->{config}->param('thumb-type');
 	my $cache = $self->{config}->param('cache');
 	my $sized = File::Spec->catdir($cache, $self->{path} . '_' . $size . '.' . $type);
@@ -234,20 +234,6 @@ sub thumbnail
 		return $sized;
 	}
 	warn "could not write thumbnail to $sized: $!";
-}
-
-
-=head2 original
-
-returns the original file
-
-=cut
-
-sub original
-{
-	my $self = shift;
-	die "file '$self->{path}' does not exist" unless -f $self->{path};
-	return $self->{path};
 }
 
 sub prepare_dir

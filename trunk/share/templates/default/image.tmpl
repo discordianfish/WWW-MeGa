@@ -7,8 +7,7 @@
 				<img src="?rm=image;size=<%= SIZE %>;path=<%= PATH_REL %>" alt="<%= NAME %>" />
 				</a>
 				<ul>
-					<li>Size: <%= SIZE %></li>
-					<li><a href="?rm=original;path=<%= PATH_REL %>">Original file</a></li>
+					<li><a href="?rm=image;path=<%= PATH_REL %>">Original file</a></li>
 				</ul>
 				<%include exif/common.tmpl %>
 				<%case Text %>
@@ -16,8 +15,8 @@
 <%= CONTENT %>
 				</pre>
 				<%case default %>
-				<object data="?rm=original;path=<%= PATH_REL %>" /><br />
-				<a href="?rm=original;path=<%= PATH_REL %>">Download file</a>
+				<object data="?rm=image;path=<%= PATH_REL %>" type="<%= MIME %>" /><br />
+				<a href="?rm=image;path=<%= PATH_REL %>">Download file</a>
 			<%/switch %>
 		</div>
 <%include footer.tmpl %>
