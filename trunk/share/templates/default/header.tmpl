@@ -61,7 +61,7 @@
 		</style>
 	</head>
 	<body>
-	<div class='nav'><a href="?path=<%= PARENT %>">back to <%= PARENT %></a><br />
+	<div class='nav'><%if PARENT %><a href="?path=<%= PARENT %>">back to <%= PARENT %></a><%/if%><br />
 	<span class='off'>
 		<a class='prev' href="?size=<%= SIZE %>;path=<%= PATH_REL %>;off=prev">Previous</a>
 		<a class='next' href="?size=<%= SIZE %>;path=<%= PATH_REL %>;off=next">Next</a>
