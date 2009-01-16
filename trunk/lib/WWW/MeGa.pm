@@ -16,6 +16,11 @@ WWW::MeGa - A MediaGallery
 
 =head1 DESCRIPTION
 
+
+THIS IS A SECURITY BUGFIX RELEASE.
+PLEASE UPDATE TO 0.1.1 IF YOU HAVE 0.1
+
+
 WWW::MeGa is a web based media gallery. It should
 be run from FastCGI (see examples/gallery.fcgi) or mod_perl (not yet
 tested) because it uses some runtime caching.
@@ -212,7 +217,7 @@ Path to the icons and templates, defaults to C<icons/> in the module's share dir
 =cut
 
 use CGI::Application;
-use File::Spec;
+use File::Spec::Functions qw(splitdir catdir no_upwards);
 use Scalar::Util;
 use File::ShareDir;
 use FindBin qw($RealBin);
@@ -226,11 +231,11 @@ use WWW::MeGa::Item;
 
 use Carp;
 
-our $VERSION = '0.1';
+our $VERSION = '0.1.1';
 sub setup
 {
 	my $self = shift;
-	$self->{PathPattern} = "[^-,()'.\/ _0-9A-Za-z\x80-\xff\[\]]";
+	$self->{PathPattern} = "[^-,()'.\/ _0-9A-Za-z\[\]]";
 	
 	my $share = eval { File::ShareDir::module_dir('WWW::MeGa') } || "$RealBin/../share";
 
@@ -246,10 +251,10 @@ sub setup
 		'video-thumbs-offset' => 10,
 		'exif' => 1,
 		'ffmpeg-path' => 'ffmpeg',
-		'root' => File::Spec->catdir($share, 'images'),
+		'root' => catdir($share, 'images'),
 		'debug' => 0,
-		'icons' => File::Spec->catdir($share, 'icons'),
-		'templates' => File::Spec->catdir($share, 'templates', 'default')
+		'icons' => catdir($share, 'icons'),
+		'templates' => catdir($share, 'templates', 'default')
 	);
 
 	unless ( -e $config )
@@ -296,7 +301,7 @@ sub view_error
 	my $self = shift;
 	my $error = shift;
 	warn "ERROR: $error";
-	my $t = $self->load_tmpl('error.tmpl', die_on_bad_params=>0, global_vars=>1);
+	my $t = $self->load_tmpl('error.tmpl', die_on_bad_params=>0, global_vars=>1, default_escape =>'HTML');
 	$self->header_props ({-status => 404 });
 	$t->param(ERROR => $error);
 	return $t->output;
@@ -312,17 +317,11 @@ sub saneReq
 	return $req;
 }
 
-sub fileReq
-{
-	my $self = shift;
-	my $path = $self->saneReq('path') or die "want file, got nothing";
-	return $path
-}
-
 sub pathReq
 {
 	my $self = shift;
 	my $path = $self->saneReq('path') || '';
+	$path = catdir no_upwards splitdir $path;
 	return $path;
 }
 
@@ -348,7 +347,7 @@ shows a thumbnail
 sub view_image
 {
 	my $self = shift;
-	my $path = $self->fileReq;
+	my $path = $self->pathReq or die 'no path specified';
 
 	my $s = $self->sizeReq;
 	my $item = WWW::MeGa::Item->new($path,$self->config,$self->{cache});
@@ -408,7 +407,7 @@ sub view_path
 		$template = 'image.tmpl';
 	}
 
-	my $t = $self->load_tmpl($template, die_on_bad_params=>0, global_vars=>1);
+	my $t = $self->load_tmpl($template, die_on_bad_params=>0, global_vars=>1, default_escape =>'HTML');
 	$t->param(%hash);
 
 	return $t->output;
