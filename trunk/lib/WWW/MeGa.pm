@@ -430,7 +430,7 @@ sub binary
 
 =head2 How do i..
 
-=head3 ..select a image a Folder-Thumbnail?
+=head3 ..set a image as a thumbnail for a album?
 
 L<WWW::MeGa> uses the image named C<THUMBNAIL> (or whatever you setup
 for C<album_thumb> in the config) in each folder as its thumbnail. So
