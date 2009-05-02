@@ -245,6 +245,7 @@ sub setup
 	(
 		'sizes' => [ 120, 600, 800 ],
 		'cache' => '/tmp/www-mega',
+		'url' => $self->query->url(-full => 1),
 		'album_thumb' => 'THUMBNAIL',
 		'thumb-type' => 'png',
 		'video-thumbs' => 1,
