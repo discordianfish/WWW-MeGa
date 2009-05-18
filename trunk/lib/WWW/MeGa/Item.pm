@@ -63,6 +63,7 @@ sub new
 	my $proto = shift;
 	my $self = {};
         $self->{path_rel} = shift; # relative path
+	warn "path_rel: $self->{path_rel}\n";
 	$self->{config} = shift;
 	$self->{cache} = shift;
 
@@ -159,33 +160,28 @@ It should not be called directly but through the caching methode C<$self->thumbn
 
 sub thumbnail_sized
 {
-	use Image::Magick;
-
+	use Image::Resize;
 	my $self = shift;
 	my $size = shift;
 	my $type = $self->{config}->param('thumb-type');
-	my $img = $self->thumbnail_source;
+	$type = 'jpeg' if $type eq 'jpg';
 
-	$img = File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ICON_TYPE)
-		if !$img or not -r $img;
+	my $file = $self->thumbnail_source;
+	$file = File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ICON_TYPE)
+		if !$file or not -r $file;
 
-	my @magick =
-	(
-		[ 'Read', $img ],
-		[ 'Resize', $size . 'x' . $size],
-		[ 'AutoOrient', 1],
-		[ 'ImageToBlob', { magick => $type } ]
-	);
+	my $resize = Image::Resize->new($file);
 
-        my $image = Image::Magick->new;
-	foreach my $cmd (@magick)
-	{
-		my ($m, $p) = @$cmd;
-		my $ret = $image->$m($p);
-		return $ret if $m eq $magick[@magick-1]->[0];
+	my $img = $resize->resize($size, $size, 1); #TODO
+#	my $exif = $self->exif;
 
-		warn $ret and return if $ret;
-	}
+	return $img->$type;
+
+#	$exif->{}
+	
+	
+	#->copyRotate90()
+
 }
 
 
@@ -215,7 +211,7 @@ If no, try to create it first by calling C<$self->thumbnail_sized>
 sub thumbnail
 {
 	my $self = shift;
-	my $size = shift or return $self->{path};
+	my $size = shift or return $self->{path}; # no size -> original file
 	my $type = $self->{config}->param('thumb-type');
 	my $cache = $self->{config}->param('cache');
 	my $sized = File::Spec->catdir($cache, $self->{path} . '_' . $size . '.' . $type);

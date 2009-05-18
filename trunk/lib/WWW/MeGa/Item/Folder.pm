@@ -59,7 +59,7 @@ sub list
 	{
 		next if $file eq '.' or $file eq '..';
 		next if $file eq $thumb;
-		push @dir, File::Spec->catdir($self->{path_rel},$file);
+		push @dir, $self->{path_rel} ? File::Spec->catdir($self->{path_rel},$file) : $file;
 	}
 	closedir $dh;
 	return sort @dir

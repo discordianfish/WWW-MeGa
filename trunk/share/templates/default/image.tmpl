@@ -3,11 +3,11 @@
 			<h1><%= NAME %></h1>
 			<%switch TYPE %>
 				<%case Image %>
-				<a href="?rm=image;size=<%= SIZE_IN %>;path=<%= PATH_REL %>">
-				<img src="?rm=image;size=<%= SIZE %>;path=<%= PATH_REL %>" alt="<%= NAME %>" />
+				<a href="<%= CONFIG.url %>/image/<%= SIZE_IN %>/<%= PATH_REL %>">
+				<img src="<%= CONFIG.url %>/image/<%= SIZE %>/<%= PATH_REL %>" alt="<%= NAME %>" />
 				</a>
 				<ul>
-					<li><a href="?rm=image;path=<%= PATH_REL %>">Original file</a></li>
+					<li><a href="<%= CONFIG.url %>/image/-1/<%= PATH_REL %>">Original file</a></li>
 				</ul>
 				<%include exif/common.tmpl %>
 				<%case Text %>
@@ -15,8 +15,8 @@
 <%= CONTENT %>
 				</pre>
 				<%case default %>
-				<object data="?rm=image;path=<%= PATH_REL %>" type="<%= MIME %>" width="300" height="50" /><br />
-				<a href="?rm=image;path=<%= PATH_REL %>">Download file</a>
+				<object data="<%= CONFIG.url %>/image/-1/<%= PATH_REL %>" type="<%= MIME %>" width="300" height="50" /><br />
+				<a href="<%= CONFIG.url %>/image/-1/<%= PATH_REL %>">Download file</a>
 			<%/switch %>
 		</div>
 <%include footer.tmpl %>

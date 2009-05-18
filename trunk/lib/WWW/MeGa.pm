@@ -143,7 +143,7 @@ You can specify the path to a (writable) config file in the new methode of WWW::
 
    my $gallery = WWW::MeGa->new(PARAMS => { config => '/path/to/gallery.conf' })
 
-It defaults to $RealBin/gallery.conf, see L<FindBin> for more info.
+It defaults to $Bin/gallery.conf, see L<FindBin> for more info.
 After the first run it will create a config containing the defaults.
 
 
@@ -166,9 +166,7 @@ The file named like that will be skipped when showing the content of the folder.
 =head3 thumb-type
 
 Type of the thumbnails.
-L<WWW::MeGa> uses L<Image::Magick> for generating thumbnails.
-See C<convert -list format> for file types supported by you ImageMagick
-installation.
+L<WWW::MeGa> uses L<Image::Resize> for generating thumbnails.
 
 =head3 video-thumbs
 
@@ -220,7 +218,7 @@ use CGI::Application;
 use File::Spec::Functions qw(splitdir catdir no_upwards);
 use Scalar::Util;
 use File::ShareDir;
-use FindBin qw($RealBin);
+use FindBin qw($RealBin $Bin);
 
 use base ("CGI::Application::Plugin::HTCompiled", "CGI::Application");
 
@@ -239,7 +237,7 @@ sub setup
 	
 	my $share = eval { File::ShareDir::module_dir('WWW::MeGa') } || "$RealBin/../share";
 
-	my $config = $self->config_file($self->param('config') || "$RealBin/gallery.conf");
+	my $config = $self->config_file($self->param('config') || "$Bin/gallery.conf");
 
 	my %default_config =
 	(
@@ -294,7 +292,29 @@ sub setup
 	);
 	$self->start_mode('view');
 	$self->error_mode('view_error');
+
+
+	$self->mode_param(path_info => 1);
+
+	warn "url is: " . $self->config_param('url');
+
 	return;
+}
+
+sub cgiapp_prerun
+{
+	my $self = shift;
+	@_ = split /\//, $self->query->path_info;
+	shift; # path_info starts with a slash, removing first (empty) element
+	my $rm = shift;
+	my $size = shift;
+
+	$self->{'params'} =
+	{
+		rm => $rm,
+		size => $size,
+		path => catdir @_
+	};
 }
 
 sub view_error
@@ -313,7 +333,12 @@ sub saneReq
 	my $self = shift;
 	my $param = shift;
 	my $pattern = shift || $self->{PathPattern};
-	defined(my $req = $self->query->param($param)) or return;
+	my $req = $self->{params}->{$param};
+	$req = $self->query->param($param) unless defined $req;
+
+	return unless defined $req;
+
+	warn "param($param)='$req'\n";
 	$req =~ s/$pattern//g;
 	return $req;
 }
@@ -368,6 +393,7 @@ sub view_path
 	my $self = shift;
 	my $path = $self->pathReq;
 	my $size_idx = $self->sizeReq || 0;
+	warn "$path / $size_idx";
 	my $off;
 	{
 		my $tmp = $self->query->param('off');
