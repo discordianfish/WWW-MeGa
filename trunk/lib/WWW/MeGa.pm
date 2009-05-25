@@ -243,7 +243,6 @@ sub setup
 	(
 		'sizes' => [ 120, 600, 800 ],
 		'cache' => '/tmp/www-mega',
-		'url' => $self->query->url(-full => 1),
 		'album_thumb' => 'THUMBNAIL',
 		'thumb-type' => 'png',
 		'video-thumbs' => 1,
@@ -255,6 +254,8 @@ sub setup
 		'icons' => catdir($share, 'icons'),
 		'templates' => catdir($share, 'templates', 'default')
 	);
+	$self->{url} = $self->query->script_name;
+	warn "url is '$self->{url}'";
 
 	unless ( -e $config )
 	{
@@ -295,8 +296,6 @@ sub setup
 
 
 	$self->mode_param(path_info => 1);
-
-	warn "url is: " . $self->config_param('url');
 
 	return;
 }
@@ -354,7 +353,7 @@ sub pathReq
 sub sizeReq
 {
 	my $self = shift;
-	defined ( my $size = $self->saneReq('size', '[^0-9]') ) or return; # 0; #return @{$self->{sizes}}[0];
+	defined ( my $size = $self->saneReq('size', '[^0-9\-]') ) or return; # 0; #return @{$self->{sizes}}[0];
 	die "no size '$size'" unless $self->{sizes}->[$size];
 	return $size;
 }
@@ -376,6 +375,7 @@ sub view_image
 	my $path = $self->pathReq or die 'no path specified';
 
 	my $s = $self->sizeReq;
+	warn "size hiere: '$s'";
 	my $item = WWW::MeGa::Item->new($path,$self->config,$self->{cache});
 
 	return $self->binary($item, defined $s ? $self->{sizes}->[$s] : undef);
@@ -421,7 +421,7 @@ sub view_path
 
 
 
-	my %hash = (PARENT => $parent, %sizes, %{ $item->data }, CONFIG => { $self->config->vars }, MIME => $item->{mime});
+	my %hash = (PARENT => $parent, %sizes, %{ $item->data }, url => $self->{url}, CONFIG => { $self->config->vars }, MIME => $item->{mime});
 	my $template;
 
 	if (Scalar::Util::blessed($item) eq 'WWW::MeGa::Item::Folder')
