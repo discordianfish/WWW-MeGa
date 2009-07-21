@@ -354,6 +354,7 @@ sub sizeReq
 {
 	my $self = shift;
 	defined ( my $size = $self->saneReq('size', '[^0-9\-]') ) or return; # 0; #return @{$self->{sizes}}[0];
+	return unless $size >= 0;
 	die "no size '$size'" unless $self->{sizes}->[$size];
 	return $size;
 }
@@ -375,7 +376,6 @@ sub view_image
 	my $path = $self->pathReq or die 'no path specified';
 
 	my $s = $self->sizeReq;
-	warn "size hiere: '$s'";
 	my $item = WWW::MeGa::Item->new($path,$self->config,$self->{cache});
 
 	return $self->binary($item, defined $s ? $self->{sizes}->[$s] : undef);
