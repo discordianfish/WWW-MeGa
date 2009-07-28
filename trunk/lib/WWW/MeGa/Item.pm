@@ -160,7 +160,8 @@ It should not be called directly but through the caching methode C<$self->thumbn
 
 sub thumbnail_sized
 {
-	use Image::Resize;
+	#use Image::Resize;
+	use GD;
 	my $self = shift;
 	my $size = shift;
 	my $type = $self->{config}->param('thumb-type');
@@ -170,18 +171,28 @@ sub thumbnail_sized
 	$file = File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ICON_TYPE)
 		if !$file or not -r $file;
 
-	my $resize = Image::Resize->new($file);
+	
+	my $src = GD::Image->new($file);
 
-	my $img = $resize->resize($size, $size, 1); #TODO
-#	my $exif = $self->exif;
+	my ($h,$w) = $src->getBounds;
+	my $aspect = $w/$h;
+
+	my $img = GD::Image->new($size, $size*$aspect);
+	$img->trueColor(1);
+
+       	$img->copyResampled($src,0,0,0,0,$size,$size*$aspect,$src->getBounds);
+
+	my $exif = $self->exif;
+	my %angles =
+	(
+		'Rotate 90 CW' => 'copyRotate90',
+		'Rotate 270 CW' => 'copyRotate270',
+		'Rotate 180' => 'copyRotate180',
+	);
+	my $rt = $angles{$exif->{Orientation}};
+	$img = $img->$rt if $rt;
 
 	return $img->$type;
-
-#	$exif->{}
-	
-	
-	#->copyRotate90()
-
 }
 
 
