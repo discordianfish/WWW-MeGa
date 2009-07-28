@@ -11,7 +11,7 @@
 				<p class="name"><%if EXIF.Title %> <%= EXIF.Title %><%else %><%= NAME %><%/if %></p>
 				<p class="exif-tiny"><%include "exif/tiny.tmpl" %></p>
 				<%switch TYPE %>
-					<%case Audio,Video,Image %><a href="<%= url %>/image/-1/<%= PATH_REL %>">Download</a>
+					<%case Audio,Video %><a href="<%= url %>/image/-1/<%= PATH_REL %>">Download</a>
 				<%/switch %>
 			</div>
 		<%/loop %>
