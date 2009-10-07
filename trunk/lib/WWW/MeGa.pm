@@ -437,6 +437,8 @@ sub view_path
 	my $t = $self->load_tmpl($template, die_on_bad_params=>0, global_vars=>1, default_escape =>'HTML');
 	$t->param(%hash);
 
+	$self->header_props ({-type => 'text/html; charset=utf-8' });
+
 	return $t->output;
 }
 
