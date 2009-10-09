@@ -44,6 +44,8 @@ specific object was found
 
 use Carp qw(confess);
 use File::Basename qw(basename dirname);
+use File::Spec::Functions qw(splitdir catdir);
+use URI::Escape qw(uri_escape);
 use constant ICON_TYPE => 'png';
 
 our $VERSION = '0.1.1';
@@ -115,8 +117,10 @@ sub data
 		FILE => $self->{file},
 		PATH => $self->{path},
 		PATH_REL => $self->{path_rel},
+		PATH_REL_ESCAPED => (catdir map { uri_escape $_ } splitdir $self->{path_rel}),
 		NAME => $self->{file},
 	};
+
 	$data->{EXIF} = $self->exif;
 	$data->{TYPE} = (split(/::/, Scalar::Util::blessed($self)))[-1];
 	return $data;
