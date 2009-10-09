@@ -37,7 +37,9 @@ sub thumbnail_source
 
 	return $thumb if -e $thumb;
 	warn "$thumb not found, autoselecting" if $self->{config}->param('debug');
-	my $first = $self->first or return;
+	my $first = $self->first or
+		return $self->SUPER::thumbnail_source;
+
 	my $item = WWW::MeGa::Item->new($first,$self->{config},$self->{cache});
 	return $item->thumbnail_source;
 }
