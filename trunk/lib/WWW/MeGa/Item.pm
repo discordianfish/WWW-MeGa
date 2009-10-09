@@ -168,8 +168,8 @@ sub thumbnail_sized
 	$type = 'jpeg' if $type eq 'jpg';
 
 	my $file = $self->thumbnail_source;
-	$file = File::Spec->catdir($self->{config}->param('icons'), $self->{type} .'.'. ICON_TYPE)
-		if !$file or not -r $file;
+	die "file '$file' is not readable"
+		if not -r $file;
 
 	
 	my $src = GD::Image->new($file);
@@ -189,6 +189,7 @@ sub thumbnail_sized
 		'Rotate 270 CW' => 'copyRotate270',
 		'Rotate 180' => 'copyRotate180',
 	);
+	warn "\tOrientation: $exif->{Orientation}, so i do: $angles{$exif->{Orientation}}";
 	my $rt = $angles{$exif->{Orientation}};
 	$img = $img->$rt if $rt;
 
@@ -208,6 +209,19 @@ have a real thumbnail.
 
 sub thumbnail_source
 {
+	my $self = shift;
+	warn "no specific method found, possible reasons: no thumbnail support or unreadable thumbnail, using icon type $self->{type}";
+
+	for my $type ($self->{type}, 'Other')
+	{
+		my $file = File::Spec->catdir
+		(
+			$self->{config}->param('icons'),
+			$type .'.'. ICON_TYPE
+		);
+		return $file if -r $file;
+	}
+	die "no icon found, wrong icon dir setup?";
 }
 
 
