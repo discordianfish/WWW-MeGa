@@ -60,6 +60,7 @@ sub list
 	while (my $file = readdir $dh)
 	{
 		next if $file eq '.' or $file eq '..';
+		next if $file =~ /^\./; #hidden dir
 		next if $file eq $thumb;
 		push @dir, $self->{path_rel} ? File::Spec->catdir($self->{path_rel},$file) : $file;
 	}
@@ -80,6 +81,7 @@ sub first
 	while(my $file = readdir $dh)
 	{
 		next if $file eq '.' or $file eq '..';
+		next if $file =~ /^\./; #hidden dir
 		close $dh;
 		return File::Spec->catdir($self->{path_rel},$file);
 	}
