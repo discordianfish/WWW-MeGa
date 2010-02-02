@@ -41,9 +41,9 @@ sub thumbnail_source
 			$self->prepare_dir($frame) or die "could not create dir for $frame";
 			system($self->{config}->param('ffmpeg-path'), '-i', $self->{path}, '-f', 'image2', '-ss', $self->{config}->param('video-thumbs-offset'), '-vframes', 1, $frame);
 		}
-		return $frame;
+		return $frame if -r $frame;
 	}
-	return;
+	return $self->SUPER::thumbnail_source;
 }
 
 1;

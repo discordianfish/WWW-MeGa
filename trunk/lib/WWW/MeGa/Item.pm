@@ -49,6 +49,7 @@ use URI::Escape qw(uri_escape);
 use constant ICON_TYPE => 'png';
 
 our $VERSION = '0.1.1';
+our $DEBUG;
 
 =head2 new($relative_path, $config, $cache)
 
@@ -97,6 +98,8 @@ sub new
 
 	$self->{type} = $type;
 
+	$DEBUG = $self->{config}->param('debug');
+
 	bless $self, $class;
 	return $self;
 }
@@ -144,7 +147,7 @@ sub exif
         use Image::ExifTool;
         my $et = Image::ExifTool->new();
         my %data;
-        warn "reading exif from $self->{path}" if $self->{config}->param('debug');
+        warn "reading exif from $self->{path}" if $DEBUG;
 	my $exif = $et->ImageInfo((-d $self->{path}) ? $self->thumbnail_source : $self->{path});
 	return if $exif->{Error};
 	$self->{cache}->{exif}->{$self->{path}} = $exif;
@@ -172,11 +175,12 @@ sub thumbnail_sized
 	$type = 'jpeg' if $type eq 'jpg';
 
 	my $file = $self->thumbnail_source;
+	warn "using '$file' as thumbnail'";
 	die "file '$file' is not readable"
 		if not -r $file;
 
 	
-	my $src = GD::Image->new($file);
+	my $src = GD::Image->new($file) or die "could not open '$file'";
 
 	my ($h,$w) = $src->getBounds;
 	my $aspect = $w/$h;
@@ -193,7 +197,7 @@ sub thumbnail_sized
 		'Rotate 270 CW' => 'copyRotate270',
 		'Rotate 180' => 'copyRotate180',
 	);
-	warn "\tOrientation: $exif->{Orientation}, so i do: $angles{$exif->{Orientation}}";
+	warn "\tOrientation: $exif->{Orientation}, so i do: $angles{$exif->{Orientation}}" if $DEBUG;
 	my $rt = $angles{$exif->{Orientation}};
 	$img = $img->$rt if $rt;
 
@@ -214,7 +218,7 @@ have a real thumbnail.
 sub thumbnail_source
 {
 	my $self = shift;
-	warn "no specific method found, possible reasons: no thumbnail support or unreadable thumbnail, using icon type $self->{type}";
+	warn "no specific method found, possible reasons: no thumbnail support or unreadable thumbnail, using icon type $self->{type}" if $DEBUG;
 
 	for my $type ($self->{type}, 'Other')
 	{
@@ -223,6 +227,7 @@ sub thumbnail_source
 			$self->{config}->param('icons'),
 			$type .'.'. ICON_TYPE
 		);
+		warn "$file?" if $DEBUG;
 		return $file if -r $file;
 	}
 	die "no icon found, wrong icon dir setup?";
