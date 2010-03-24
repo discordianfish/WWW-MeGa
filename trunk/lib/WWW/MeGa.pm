@@ -219,7 +219,8 @@ use File::Spec::Functions qw(splitdir catdir no_upwards);
 use Scalar::Util;
 use File::ShareDir;
 use FindBin qw($RealBin $Bin);
-
+use JSON;
+use Data::Dumper;
 use base ("CGI::Application::Plugin::HTCompiled", "CGI::Application");
 
 use CGI::Application::Plugin::Config::Simple;
@@ -230,10 +231,15 @@ use WWW::MeGa::Item;
 use Carp;
 
 our $VERSION = '0.1.1';
+
+
 sub setup
 {
 	my $self = shift;
 	$self->{PathPattern} = "[^-,()'.\/ _0-9A-Za-z\[\]]";
+
+	$self->{json} = JSON->new->pretty;
+	$self->{json}->allow_unknown;
 	
 	my $share = eval { File::ShareDir::module_dir('WWW::MeGa') } || "$RealBin/../share";
 
@@ -314,13 +320,17 @@ sub cgiapp_prerun
 		size => $size,
 		path => catdir @_
 	};
+	$self->{JSON} = 1 if $self->query->param('format') eq 'json';
 }
 
 sub view_error
 {
 	my $self = shift;
 	my $error = shift;
+
 	warn "ERROR: $error";
+	return $self->{json}->encode({ERROR => $error}) if $self->{JSON};
+
 	my $t = $self->load_tmpl('error.tmpl', die_on_bad_params=>0, global_vars=>1, default_escape =>'HTML');
 	$self->header_props ({-status => 404 });
 	$t->param(ERROR => $error);
@@ -433,6 +443,10 @@ sub view_path
 	{
 		$template = 'image.tmpl';
 	}
+	#
+	# warn Dumper(\%to_json);
+
+	return $self->{json}->encode(\%hash) if $self->{JSON};
 
 	my $t = $self->load_tmpl($template, die_on_bad_params=>0, global_vars=>1, default_escape =>'HTML');
 	$t->param(%hash);

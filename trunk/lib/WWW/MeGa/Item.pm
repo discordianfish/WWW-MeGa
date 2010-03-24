@@ -180,7 +180,7 @@ sub thumbnail_sized
 		if not -r $file;
 
 	
-	my $src = GD::Image->new($file) or die "could not open '$file'";
+	my $src = GD::Image->new($file) or die "could not open '$file': $@";
 
 	my ($h,$w) = $src->getBounds;
 	my $aspect = $w/$h;
