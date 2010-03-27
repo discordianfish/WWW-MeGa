@@ -465,7 +465,7 @@ sub binary
 	my $item = shift;
 	my $size = shift;
 
-	$self->header_add( -'Content-disposition' => 'inline' );
+	$self->header_add( -'Content-disposition' => 'inline', -type => $item->{mime} );
 	return $self->stream_file($item->thumbnail($size)) ? undef : $self->error_mode;
 }
 

@@ -14,8 +14,15 @@
 				<pre>
 <%= CONTENT %>
 				</pre>
+				<%case Video %>
+				<video src="<%= url %>/image/-1/<%= PATH_REL %>" controls="controls">
+					<a href="<%= url %>/image/-1/<%= PATH_REL %>">Download video file</a>
+				</video>
+				<%case Audio %>
+				<audio src="<%= url %>/image/-1/<%= PATH_REL %>" controls="controls">
+					<a href="<%= url %>/image/-1/<%= PATH_REL %>">Download audio file</a>
+				</audio>
 				<%case default %>
-				<object data="<%= url %>/image/-1/<%= PATH_REL %>" type="<%= MIME %>" width="300" height="50" /><br />
 				<a href="<%= url %>/image/-1/<%= PATH_REL %>">Download file</a>
 			<%/switch %>
 		</div>
