@@ -197,9 +197,13 @@ sub thumbnail_sized
 		'Rotate 270 CW' => 'copyRotate270',
 		'Rotate 180' => 'copyRotate180',
 	);
-	warn "\tOrientation: $exif->{Orientation}, so i do: $angles{$exif->{Orientation}}" if $DEBUG;
 	my $rt = $angles{$exif->{Orientation}};
-	$img = $img->$rt if $rt;
+	warn "\tOrientation: $exif->{Orientation}, so i do: $rt" if $DEBUG;
+	if ($rt)
+	{
+		$img = $img->$rt or warn $@;
+	}
+
 
 	return $img->$type;
 }
