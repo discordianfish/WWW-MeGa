@@ -51,7 +51,8 @@ use File::Find;
 use File::Spec;
 use FindBin qw($RealBin);
 
-use constant 'URL_FS' => "%s?rm=image;path=%s;size=%s\n";
+#use constant 'URL_FS' => "%s?rm=image;path=%s;size=%s\n";
+use constant 'URL_FS' => "%s/image/%s/%s\n"; # root, zoom, path
 use constant 'SIZES' => ( 0, 1, 2 );
 
 use if -e "$RealBin/../Makefile.PL", lib => "$RealBin/../lib";
@@ -73,5 +74,5 @@ sub ping
 	my $abs = $File::Find::name;
 	return unless -f $abs;
 	my $rel = File::Spec->abs2rel($abs, $ROOT);
-	printf URL_FS, $url, $rel, $_ for (SIZES);
+	printf URL_FS, $url, $_, $rel for (SIZES);
 }
