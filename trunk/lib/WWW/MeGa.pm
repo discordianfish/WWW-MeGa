@@ -243,7 +243,7 @@ sub setup
 	
 	my $share = eval { File::ShareDir::module_dir('WWW::MeGa') } || "$RealBin/../share";
 
-	my $config = $self->config_file($self->param('config') || "$Bin/gallery.conf");
+	my $config = $ENV{GALLERY_CONFIG} || $self->config_file($self->param('config') || "$Bin/gallery.conf");
 
 	my %default_config =
 	(
