@@ -1,7 +1,8 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 # $Id$
 
 use strict;
+use warnings;
 
 =head1 NAME
 
