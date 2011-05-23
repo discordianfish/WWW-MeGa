@@ -185,10 +185,10 @@ sub thumbnail_sized
 	my ($h,$w) = $src->getBounds;
 	my $aspect = $w/$h;
 
-	my $img = GD::Image->new($size, $size*$aspect);
+	my $img = GD::Image->new($size*$aspect, $size*$aspect);
 	$img->trueColor(1);
 
-       	$img->copyResampled($src,0,0,0,0,$size,$size*$aspect,$src->getBounds);
+       	$img->copyResampled($src,0,0,0,0,$size*$aspect,$size*$aspect,$src->getBounds);
 
 	my $exif = $self->exif;
 	my %angles =
