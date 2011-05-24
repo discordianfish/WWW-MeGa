@@ -309,7 +309,7 @@ sub setup
 sub cgiapp_prerun
 {
 	my $self = shift;
-	@_ = split /\//, $self->query->path_info;
+	@_ = split /\//, $ENV{PATH_INFO};
 	shift; # path_info starts with a slash, removing first (empty) element
 	my $rm = shift;
 	my $size = shift;
@@ -443,8 +443,6 @@ sub view_path
 	{
 		$template = 'image.tmpl';
 	}
-	#
-	# warn Dumper(\%to_json);
 
 	return $self->{json}->encode(\%hash) if $self->{JSON};
 
