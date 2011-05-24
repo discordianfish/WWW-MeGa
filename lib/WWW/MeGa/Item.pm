@@ -76,6 +76,7 @@ sub new
 
 
         my $type;
+        warn "path: $self->{path}";
         if (-d $self->{path})
         {
                 $type = 'Folder';
@@ -84,6 +85,7 @@ sub new
                 use MIME::Types;
                 my $mt = MIME::Types->new();
                 my $mime = $mt->mimeTypeOf($self->{path});
+                warn "mime-type for $self->{path}: $mime";
 		$self->{mime} = $mime;
 
                 $type = $mime ? ucfirst ((split '/', $mime)[0]) : 'Other';

@@ -439,9 +439,19 @@ sub view_path
 		$template = 'album.tmpl';
 		my @items = map { (WWW::MeGa::Item->new($_,$self->config(),$self->{cache}))->data } $item->list;
 		$hash{ITEMS} = \@items;
+        $hash{SIZE_THUMB} = $hash{SIZE};
 	} else
 	{
 		$template = 'image.tmpl';
+        if ($self->config_param('album_on_image_page'))
+        {
+            warn "parent: $parent";
+            my $album = WWW::MeGa::Item->new($parent,$self->config,$self->{cache});
+            my @items = map { (WWW::MeGa::Item->new($_,$self->config(),$self->{cache}))->data } $album->list;
+            $hash{ITEMS} = \@items;
+            $hash{SIZE_THUMB} = $hash{SIZE_OUT};
+            $hash{SIZE_IN} = $hash{SIZE};
+        }
 	}
 
 	return $self->{json}->encode(\%hash) if $self->{JSON};
